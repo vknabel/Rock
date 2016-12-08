@@ -39,8 +39,8 @@ $ rock spec add vknabel/Rock --install --default
 First add the rock-bin to your `$PATH` variable to your `.bashrc`, `.bash_profile` or `.zshrc`.
 
 ```bash
-ROCK_PATH="$HOME/.rock" # default, optional
-PATH="$PATH:$ROCK_PATH/rocksets/global/bin"
+export ROCK_PATH="$HOME/.rock" # default
+export PATH="$PATH:$ROCK_PATH/rocksets/global/bin"
 ```
 
 Thereafter start 🎸ing your 🚀s by simply cloning the repository, building the swift module and installing rock itself.
