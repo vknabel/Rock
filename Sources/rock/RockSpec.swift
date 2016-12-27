@@ -10,11 +10,12 @@ import Foundation
 import PathKit
 import Swiftline
 import Yaml
+import RockLib
 
 enum RockError: Error {
   case rethrow(String, String?)
   case report(String)
-  
+
   static func wrap<T>(_ closure: @autoclosure () throws -> T, _ annotation: String? = nil) throws -> T {
     do {
       return try closure()
@@ -26,18 +27,7 @@ enum RockError: Error {
 
 extension RunResults: Error { }
 
-struct RockSpec {
-  var name: String
-  var url: String
-  
-  var path: Path {
-    return RockEnv.rockSpecs + name
-  }
-  
-  var specs: Path {
-    return path + "Specs"
-  }
-  
+extension RockSpec {
   func prepare(settings: ((RunSettings) -> Void)? = nil) throws -> Void {
     try path.parent().mkpath()
     if path.exists {
@@ -46,61 +36,28 @@ struct RockSpec {
       try RockError.wrap(clone(settings: settings), "Preparing RockSpec \(name.f.Blue) with origin \(url.f.Blue)")
     }
   }
-  
-  func clone(settings: ((RunSettings) -> Void)? = nil) throws -> Void {
-    if url == "" {
-      try path.mkpath()
-      try path.chdir {
-        let result = run("git", args: ["init"], settings: {
-          //$0.interactive = true
-          settings?($0)
-        })
-        guard result.exitStatus == 0 else { throw result }
-      }
-    } else {
-      try path.chdir {
-        print("👉 Cloning \(url.f.Cyan) to \(path.description.f.Cyan)")
-        let result = run("git", args: ["clone", "--recursive", "--depth", "1", url, path.description], settings: {
-          //$0.interactive = true
-          settings?($0)
-        })
-        guard result.exitStatus == 0 else { throw result }
-      }
-    }
-  }
-  
-  func update(settings: ((RunSettings) -> Void)? = nil) throws -> Void {
-    guard url != url else { return }
-    try path.chdir {
-      let result = run("git", args: ["pull"], settings: {
-        //$0.interactive = true
-        settings?($0)
-      })
-      guard result.exitStatus == 0 else { throw result }
-    }
-  }
-  
+
   private func path(for specName: String) -> Path {
     return specs + (specName + ".yaml")
   }
-  
+
   func spec(named name: String) throws -> RocketSpec {
     let specPath = path(for: name)
     let contents: String = try specPath.read()
     let yaml = try Yaml.load(contents)
     return try RocketSpec(named: name, yaml: yaml)
   }
-  
+
   func specNames() throws -> [String] {
     return try specs.children()
       .filter({ $0.isFile })
       .map({ $0.lastComponentWithoutExtension })
   }
-  
+
   func list() throws -> Void {
     try specNames().forEach({ print($0) })
   }
-  
+
   func addSpec(name: String, url: String, branch: String? = nil, install: [String] = [], uninstall: [String] = [], clean: [String] = []) throws -> RocketSpec {
     func serialize(shell: [String], name: String) -> String {
       guard shell.count != 0 else {
@@ -110,13 +67,13 @@ struct RockSpec {
         $0 + "\n- " + $1
       }
     }
-    
+
     let output = "url: \(url)"
       + (branch ?? "")
       + serialize(shell: install, name: "install")
       + serialize(shell: uninstall, name: "uninstall")
       + serialize(shell: clean, name: "clean")
-    
+
     let spec = RocketSpec(name: name, url: url, branch: branch, install: install, uninstall: uninstall, clean: clean)
     let path = self.path(for: name)
     try RockError.wrap(path.parent().mkpath(), "while creating path \(path.parent().description.f.Blue) for new RockSpec \(self.name.f.Blue) to path \(path.description.f.Blue)")
@@ -136,7 +93,7 @@ extension RockSpec {
     self.name = name
     self.url = url
   }
-  
+
   static func allSpecs() throws -> [RockSpec] {
     let specsRecordPath = RockEnv.rockSpecs + "specs.json"
     if !specsRecordPath.exists {

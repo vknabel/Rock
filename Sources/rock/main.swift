@@ -10,11 +10,12 @@ import Foundation
 import PathKit
 import Swiftline
 import Yaml
+import RockLib
 
 class Lazy<T> {
   private let raw: () -> T
   lazy var value: T = self.raw()
-  
+
   init(_ value: @escaping () -> T) {
     raw = value
   }
@@ -31,7 +32,7 @@ final class Rock {
   init() throws {
     rockSpecs = try! RockSpec.allSpecs()
   }
-  
+
   var sources: [String: RocketSrc] = [:]
 
   func source(named name: String) throws -> RocketSrc {
@@ -89,7 +90,7 @@ final class Rock {
     uninstall(name: name)
     install(name: name)
   }
-  
+
   func listRocketSpecs(named name: String) throws -> Void {
     guard let spec = rockSpecs.first(where: { $0.name == name }) else {
       throw RockError.report("There is no RockSpec \(name.f.Blue)")
@@ -106,13 +107,13 @@ final class Rock {
     guard let local = rockSpecs.first(where: { $0.name == "local" }) else {
       throw RockError.report("There is no RockSpec with name \("local".f.Blue)")
     }
-    
+
     let nameDefault = (url.components(separatedBy: "/").last ?? url).lowercased()
     var name = nameDefault
     var installs: [String] = []
     var uninstalls: [String] = []
     var cleans: [String] = []
-    
+
     if !defaultScripts {
       name = ask("❓ Name of the target to be linked? [\(nameDefault.f.Blue)]") { settings in
         settings.defaultValue = nameDefault
@@ -120,14 +121,14 @@ final class Rock {
       if name.isEmpty {
         name = nameDefault
       }
-      
+
       installs = ask("❓ How to install the project? [\("swift build".f.Magenta)]").components(separatedBy: ";")
       uninstalls = ask("❓ How to uninstall the project? [\("rm".f.Magenta)]").components(separatedBy: ";")
       cleans = ask("❓ How to clean the project? [\("rm .build".f.Magenta)]").components(separatedBy: ";")
     }
     return try! local.addSpec(name: name, url: url, install: installs, uninstall: uninstalls, clean: cleans)
   }
-  
+
   /*func list() -> Void {
     try! rockSpec.list()
   }*/
@@ -159,7 +160,7 @@ let main = Group {
 
   /*let listCommand = command(rock.list)
   $0.addCommand("list", listCommand)*/
-  
+
   $0.group("spec") {
     let addCommand = command(
       Flag("install", description: "Directly installs the created RocketSpec"),
@@ -178,13 +179,13 @@ let main = Group {
       }
     }
     $0.addCommand("add", "Adds a new RocketSpec to the RockSpec", addCommand)
-    
+
     let rocketsCommand = command(
       Argument<String>("rock spec name"),
       rock.listRocketSpecs
     )
     $0.addCommand("rockets", "Lists all RocketSpecs of a RockSpec", rocketsCommand)
-    
+
     let listCommand = command(
       rock.listRockSpecs
     )
