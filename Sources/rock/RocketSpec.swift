@@ -31,8 +31,9 @@ extension RocketSpec {
       name: name,
       url: url,
       branch: yaml["branch"].string,
-      install: yaml["install"].stringArray ?? [],
-      uninstall: yaml["uninstall"].stringArray ?? [],
+      build: yaml["build"].stringArray ?? [],
+      link: yaml["link"].stringArray ?? yaml["install"].stringArray ?? [], // todo log deprecation warning
+      unlink: yaml["unlink"].stringArray ?? yaml["uninstall"].stringArray ?? [], // todo log deprecation warning
       clean: yaml["clean"].stringArray ?? []
     )
   }
