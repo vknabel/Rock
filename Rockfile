@@ -1,0 +1,4 @@
+name: Rock
+dependencies:
+  - name: sourcery
+    url: https://github.com/krzysztofzablocki/Sourcery

@@ -40,7 +40,7 @@ First add the rock-bin to your `$PATH` variable to your `.bashrc`, `.bash_profil
 
 ```bash
 export ROCK_PATH="$HOME/.rock" # default
-export PATH="$PATH:$ROCK_PATH/rocksets/global/bin"
+export PATH="$PATH:$ROCK_PATH/bin"
 ```
 
 Thereafter start 🎸ing your 🚀s by simply cloning the repository, building the swift module and installing rock itself.
@@ -54,10 +54,7 @@ $ ./.build/debug/rock install rock
 
 ## Limitations
 
-- Rock has been designed to support different environments, but it currently only supports `global` and `custom`. Later there will be `.rockset` files, that are similar to `.gemset` or `.swift-version` files.
 - Currently there is no version handling. Instead only the `master` branch will be checked out. Therefore `rock install` will only clone the targeted repository, whereas `rock update` will pull the current `master` branch.
-- Error messages are either poor or non-existent.
-- For now there is no mechanism to support global installations of libraries. This would allow to automatically fetch missing dependencies and run swift scripts on the fly (without compilation).
 
 ## Author
 
