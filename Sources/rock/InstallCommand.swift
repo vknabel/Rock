@@ -9,6 +9,15 @@ struct InstallCommand: CommandProtocol {
   let function: String = "Installs given rockets."
   
   func run(_ options: ProjectDependencyOptions) -> Result<(), RockError> {
+    // Always update
+    let defaultSpecs = RockSpec()
+    let rockSpecs = defaultSpecs.path.exists
+      ? report("Updating specs repository", defaultSpecs.name.theme.coded, format: .step)
+        %& defaultSpecs.update()
+      : report("Cloning specs repository", defaultSpecs.name.theme.coded, "from", defaultSpecs.url.theme.coded, format: .step)
+      %& defaultSpecs.clone()
+    _ = rockSpecs(Prompt())
+    
     switch options.inputs {
     case let .left(dependencies):
       return runGlobal(dependencies)
@@ -34,14 +43,6 @@ struct InstallCommand: CommandProtocol {
         return project.rocketSpec(named: name).map { ($0, version) }
       }
     }
-    
-    let defaultSpecs = RockSpec()
-    let rockSpecs = defaultSpecs.path.exists
-      ? report("Updating specs repository", defaultSpecs.name.theme.coded, format: .step)
-        %& defaultSpecs.update()
-      : report("Cloning specs repository", defaultSpecs.name.theme.coded, "from", defaultSpecs.url.theme.coded, format: .step)
-      %& defaultSpecs.clone()
-    _ = rockSpecs(Prompt())
     
     if let specs = rocketSpecs.value {
       let specDescriptions = specs.map({ "\($0.0.name.theme.input)@\($0.1.theme.derived)" })
