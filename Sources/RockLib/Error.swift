@@ -3,7 +3,7 @@ import PromptLine
 import PathKit
 
 public enum RockError: Error {
-  case notImplemented
+  case notImplemented(String)
   
   case rockfileMustContainDictionary
   case rockfileMustHaveAName
@@ -30,6 +30,8 @@ public enum RockError: Error {
   case specsRepoCouldNotBeUpdated(RockSpec, PromptError)
   case specsRepoCouldNotBeCloned(RockSpec, PromptError)
 
+  case rocketSpecIsNotValidYaml(String?)
+  case rocketSpecCouldNotBeRead(Path, Error)
   case rocketSpecRequiresAnUrl(name: String)
   case rocketSpecCouldNotBeFound(name: String)
   case rocketSpecCouldNotBeBuilt(PromptError)

@@ -4,7 +4,7 @@ public struct RockSpec {
   public var name: String
   public var url: String
 
-  public init(name: String, url: String) {
+  public init(name: String = "global", url: String = "https://github.com/vknabel/RockSpecs") {
     self.name = name
     self.url = url
   }

@@ -1,5 +1,6 @@
 import PromptLine
 import Result
+import PathKit
 import Yaml
 
 private extension Yaml {
@@ -24,17 +25,17 @@ public struct RocketSpec {
   public init(
     name: String,
     url: String,
-    build: PromptRunner<PromptError>? = nil,
-    link: PromptRunner<PromptError>? = nil,
-    unlink: PromptRunner<PromptError>? = nil,
-    clean: PromptRunner<PromptError>? = nil
+    build: @escaping PromptRunner<PromptError>,
+    link: @escaping PromptRunner<PromptError>,
+    unlink: @escaping PromptRunner<PromptError>,
+    clean: @escaping PromptRunner<PromptError>
   ) {
     self.name = name
     self.url = url
-    self.buildRunner = (build ?? RockConfig.rockConfig.buildRunner) %? RockError.rocketSpecCouldNotBeBuilt
-    self.linkRunner = (link ?? RockConfig.rockConfig.linkRunner) %? RockError.rocketSpecCouldNotBeLinked
-    self.unlinkRunner = (unlink ?? RockConfig.rockConfig.unlinkRunner) %? RockError.rocketSpecCouldNotBeUnlinked
-    self.cleanRunner = (clean ?? RockConfig.rockConfig.cleanRunner) %? RockError.rocketSpecCouldNotBeCleaned
+    self.buildRunner = build %? RockError.rocketSpecCouldNotBeBuilt
+    self.linkRunner = link %? RockError.rocketSpecCouldNotBeLinked
+    self.unlinkRunner = unlink %? RockError.rocketSpecCouldNotBeUnlinked
+    self.cleanRunner = clean %? RockError.rocketSpecCouldNotBeCleaned
   }
 }
 
@@ -54,17 +55,17 @@ public extension RocketSpec {
         return array
       }
     }
-    func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
-      return nilIfEmpty(raw)?.map(>-).reduce(zeroRunner, %&)
+    func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
+      return (nilIfEmpty(raw) ?? fallback).map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
     }
 
     self.init(
       name: name,
       url: url,
-      build: runnerFromStrings(build),
-      link: runnerFromStrings(link),
-      unlink: runnerFromStrings(unlink),
-      clean: runnerFromStrings(clean)
+      build: runnerFromStrings(build, or: RockConfig.rockConfig.buildScript),
+      link: runnerFromStrings(link, or: RockConfig.rockConfig.linkScript),
+      unlink: runnerFromStrings(unlink, or: RockConfig.rockConfig.unlinkScript),
+      clean: runnerFromStrings(clean, or: RockConfig.rockConfig.cleanScript)
     )
   }
 }
@@ -80,5 +81,23 @@ public extension RocketSpec {
       unlink: yaml["unlink"].stringArray ?? [],
       clean: yaml["clean"].stringArray ?? []
     ))
+  }
+  
+  public static func fromPath(_ path: Path, named name: String) -> Result<RocketSpec, RockError> {
+    let yaml = Result<Yaml, AnyError>(attempt: {
+      do {
+        let text: String = try path.read()
+        return try Yaml.load(text)
+      } catch {
+        throw AnyError(error)
+      }
+    }).mapError { anyError -> RockError in
+      if case let Yaml.ResultError.message(message) = anyError.error {
+        return RockError.rocketSpecIsNotValidYaml(message)
+      } else {
+        return RockError.rocketSpecCouldNotBeRead(path, anyError.error)
+      }
+    }
+    return yaml.flatMap { RocketSpec.fromYaml($0, named: name) }
   }
 }

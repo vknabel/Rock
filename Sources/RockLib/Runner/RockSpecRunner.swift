@@ -22,4 +22,9 @@ public extension RockSpec {
     return repository.pull()
       %? { RockError.specsRepoCouldNotBeUpdated(self, $0) }
   }
+  
+  public func rocket(named name: String) -> Result<RocketSpec, RockError> {
+    let targetPath = specsPath + "\(name).yaml"
+    return RocketSpec.fromPath(targetPath, named: name)
+  }
 }

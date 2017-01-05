@@ -10,11 +10,19 @@ public struct Repository {
       %& Prompt.chdir(path, run: >-"git init")
   }
   
-  public func clone(url: String) -> PromptRunner<PromptError> {
+  public func clone(url: String, branch: String = "master") -> PromptRunner<PromptError> {
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
         path.parent(),
-        run: >-["git", "clone", "--recursive", "--depth", "1", url, path.description]
+        run: >-["git", "clone", "--recursive", "--depth", "1", url, "--branch", branch, path.description]
+    )
+  }
+  
+  public func checkout(branch: String) -> PromptRunner<PromptError> {
+    return Prompt.mkpath(path.parent())
+      %& Prompt.chdir(
+        path.parent(),
+        run: >-["git", "checkout", branch]
     )
   }
   

@@ -19,7 +19,7 @@ public enum Dependency {
 }
 
 public extension Dependency {
-  public static func fromYaml(_ yaml: Yaml) -> Result<Dependency, RockError> {
+    public static func fromYaml(_ yaml: Yaml) -> Result<Dependency, RockError> {
     switch yaml {
     case let .dictionary(root):
       if case .some(.string(_)) = root["url"], case let .some(.string(name)) = root["name"] {
@@ -28,9 +28,9 @@ public extension Dependency {
             Dependency.inlined($0, root["version"]?.string ?? "master")
         }
       } else if case .some(.string(_)) = root["name"] {
-        return .failure(.notImplemented)
+        return .failure(.notImplemented("Dependencies by name are not supported yet"))
       }
-      return .failure(.notImplemented)
+      return .failure(.notImplemented("Cannot handle dictionary dependencies without url and name"))
     case let .string(name):
       return .success(.named(name, "master"))
     default:

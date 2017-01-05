@@ -8,7 +8,7 @@ import Result
 import PromptLine
 
 // # global install with rocket, otherwise local
-// % rock install [--project path] [rocket[@tag-or-version]]*
+// % rock install [--project path] | [rocket[@tag-or-version]]*
 // # global update with rocket, otherwise local
 // % rock update [--project path] [rocket[@tag-or-version]]*
 // % rock self-update
@@ -25,6 +25,6 @@ main.register(InstallCommand())
 main.register(HelpCommand(registry: main))
 
 main.main(defaultVerb: "help") { error in
-  let reporter: PromptReporter = report("\(error)", format: ReporterFormat.error)
+  let reporter: PromptReporter = report("\(error)", format: .error)
   _ = reporter(Prompt())
 }

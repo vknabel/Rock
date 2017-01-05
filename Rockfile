@@ -1,4 +1,5 @@
 name: Rock
 dependencies:
+  - xcopen
   - name: sourcery
     url: https://github.com/krzysztofzablocki/Sourcery

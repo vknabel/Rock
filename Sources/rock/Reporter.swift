@@ -7,7 +7,7 @@ extension ReporterFormat {
   static var question = ReporterFormat(prefix: "❓", terminator: "")
   static var error = ReporterFormat(prefix: "🚫 failed:".theme.error)
 }
-    
+
 extension RockSpec {
   public var cloneReporter: PromptRunner<RockError> {
     return report("Cloning", url.theme.derived, "to", path.theme.derived, format: .step)
