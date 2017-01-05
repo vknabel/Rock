@@ -20,7 +20,7 @@ struct InstallCommand: CommandProtocol {
   func runGlobal(_ dependencies: [Dependency]) -> Result<(), RockError> {
     let project = RockProject(
       rockfile: Rockfile.global(with: dependencies),
-      rockPath: RockConfig.rockConfig.rockPath
+      rockPath: RockConfig.rockConfig.rockPath.parent()
     )
     return runProject(project)
   }
