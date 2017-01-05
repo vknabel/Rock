@@ -21,23 +21,23 @@ public struct Repository {
   public func checkout(branch: String) -> PromptRunner<PromptError> {
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
-        path.parent(),
+        path,
         run: >-["git", "checkout", branch]
     )
   }
   
   public func pull() -> PromptRunner<PromptError> {
-    return Prompt.mkpath(path.parent())
+    return Prompt.mkpath(path)
       %& Prompt.chdir(
-        path.parent(),
+        path,
         run: >-"git pull"
     )
   }
   
   public func fetch(tags: Bool = false) -> PromptRunner<PromptError> {
-    return Prompt.mkpath(path.parent())
+    return Prompt.mkpath(path)
       %& Prompt.chdir(
-        path.parent(),
+        path,
         run: >-(tags ? "git fetch --tags" : "git fetch")
     )
   }

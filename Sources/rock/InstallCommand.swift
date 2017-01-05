@@ -18,7 +18,11 @@ struct InstallCommand: CommandProtocol {
   }
   
   func runGlobal(_ dependencies: [Dependency]) -> Result<(), RockError> {
-    return .failure(RockError.notImplemented("Global installs are not supported by now"))
+    let project = RockProject(
+      rockfile: Rockfile.global(with: dependencies),
+      rockPath: RockConfig.rockConfig.rockPath
+    )
+    return runProject(project)
   }
   
   func runProject(_ project: RockProject) -> Result<(), RockError> {

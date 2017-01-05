@@ -55,6 +55,10 @@ public extension Dependency {
 public struct Rockfile {
   public let name: String
   public let dependencies: [Dependency]
+
+  public static func global(with dependencies: [Dependency]) -> Rockfile {
+    return Rockfile(name: "global", dependencies: dependencies)
+  }
 }
 
 public extension Rockfile {
