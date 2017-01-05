@@ -40,16 +40,17 @@ First add the rock-bin to your `$PATH` variable to your `.bashrc`, `.bash_profil
 
 ```bash
 export ROCK_PATH="$HOME/.rock" # default
-export PATH="$PATH:$ROCK_PATH/bin"
+export PATH="$PATH:./.rock/bin:$ROCK_PATH/bin"
 ```
 
 Thereafter start 🎸ing your 🚀s by simply cloning the repository, building the swift module and installing rock itself.
 
 ```bash
-$ git clone https://github.com/vknabel/rock
-$ cd rock
+$ git clone https://github.com/vknabel/rock $ROCK_PATH/sources/rock
+$ cd $ROCK_PATH/sources/rock
 $ swift build
-$ ./.build/debug/rock install rock
+$ mkdir $ROCK_PATH/bin
+$ cp $ROCK_PATH/sources/rock/.build/debug/rock $ROCK_PATH/bin
 ```
 
 ## Limitations

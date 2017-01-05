@@ -11,10 +11,9 @@ import PromptLine
 // % rock install [--project path] | [rocket[@tag-or-version]]*
 // # global update with rocket, otherwise local
 // % rock update [--project path] [rocket[@tag-or-version]]*
-// % rock self-update
-// % rock uninstall [--project path] [rocket]*
+// % rock self-update // no: rock install rock
+// % rock uninstall [rocket]*
 // % rock search [--project path] [rocket]
-// % rock run [--project path] %@
 
 infix operator <*> : LogicalDisjunctionPrecedence
 infix operator % : MultiplicationPrecedence
@@ -22,6 +21,7 @@ infix operator <| : MultiplicationPrecedence
 
 let main = CommandRegistry<RockError>()
 main.register(InstallCommand())
+main.register(UninstallCommand())
 main.register(HelpCommand(registry: main))
 
 main.main(defaultVerb: "help") { error in

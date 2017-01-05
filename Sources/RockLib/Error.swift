@@ -18,6 +18,8 @@ public enum RockError: Error {
   case specsJsonHasNoName
   case specsJsonHasNoUrl(name: String)
 
+  case rocketsCouldNotBeUninstalled(Error)
+  
   case allSpecsCouldNotBeDetermined
 
   case rocketBinaryCouldNotBeUnlinked(RocketSpec)

@@ -6,7 +6,7 @@ import PathKit
 
 struct InstallCommand: CommandProtocol {
   let verb: String = "install"
-  let function: String = "Installs given rockets."
+  let function: String = "Installs rockets. If no rockets are given, a project is assumed."
   
   func run(_ options: ProjectDependencyOptions) -> Result<(), RockError> {
     // Always update
