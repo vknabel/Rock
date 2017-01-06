@@ -9,11 +9,7 @@ Rockets (aka 🚀) are SwiftPM projects.
 Each 🚀 has a [RocketSpec](https://github.com/vknabel/RockSpecs/blob/master/default.yaml) which defines the Git url and how it has to be installed.
 The compiled 🚀 will be stored as binary inside the RockSet's bin folder.
 
-Rockets may be installed by using `rock install some_rocket`.
-
-A RockSet is a namespace for 🚀 which is isolated from others.
-
-***Note:*** *Currently only two RockSets called `global` and `local` is supported.*
+Rockets may be installed globally by using `rock install some_rocket` and locally by creating a `Rockfile` and running `rock install`.
 
 RockSpecs include many RocketSpecs. You can checkout the default one [here](https://github.com/vknabel/RockSpecs).
 

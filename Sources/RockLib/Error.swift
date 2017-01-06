@@ -5,6 +5,8 @@ import PathKit
 public enum RockError: Error {
   case notImplemented(String)
   
+  case rockfileAlreadyExists
+  case rockfileCouldNotBeCreated(Error)
   case rockfileMustContainDictionary
   case rockfileMustHaveAName
   case rockfileMustHaveDependencies
