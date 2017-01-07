@@ -1,7 +1,8 @@
 # Rock
 
-With Rock you can easily install CLIs build with Swift Package Manager.
-The index of all supported libraries can be found on the [RockSpecs](https://github.com/vknabel/RockSpecs) repository.
+With Rock you can easily install CLIs built with Swift Package Manager locally and globally.
+The index of all supported libraries can be found on the [RockSpecs](https://github.com/vknabel/RockSpecs) repository,
+but you can declare your own at your `Rockfile`.
 
 ## Overview
 
@@ -9,26 +10,38 @@ Rockets (aka 🚀) are SwiftPM projects.
 Each 🚀 has a [RocketSpec](https://github.com/vknabel/RockSpecs/blob/master/default.yaml) which defines the Git url and how it has to be installed.
 The compiled 🚀 will be stored as binary inside the RockSet's bin folder.
 
-Rockets may be installed globally by using `rock install some_rocket` and locally by creating a `Rockfile` and running `rock install`.
+Rockets may be installed globally by using `rock install some_rocket` and locally by creating a `Rockfile` containing all dependencies and running `rock install`.
+
+```yaml
+name: YourProject
+dependencies:
+  - empty # Just an empty dependency that installs fast
+  # Insert your dependencies here
+```
+
+In order to install all your dependencies simply run:
+
+```bash
+$ rock install
+👉 Updating specs repository global
+Already up-to-date.
+👉 Installing empty@master
+👉 Updating master of empty
+Already on 'master'
+Your branch is up-to-date with 'origin/master'.
+Already up-to-date.
+👉 Building empty
+🏃 swift build -c release
+👉 Linking empty
+🏃 cp .build/release/$ROCKET_SPEC_NAME $ROCK_PATH/bin
+✅ Successfully installed empty
+```
 
 RockSpecs include many RocketSpecs. You can checkout the default one [here](https://github.com/vknabel/RockSpecs).
 
 ***Note:*** *Currently only the `default` RockSpec is supported.*
 
-You may install 🚀, that are not listed in the [RockSpecs](https://github.com/vknabel/RockSpecs) repository once you added them to your `local` RockSpec.
-
-```bash
-$ rock spec add vknabel/Rock --install --default
-👉 Cloning https://github.com/vknabel/RockSpecs to /Users/vknabel/.rock/rockspecs/default
-👉 Cloning rock
-👉 Checking swift version
-👉 rock requires Swift 3.0.1 (set by /Users/vknabel/nativedev/Rock/.swift-version)
-👉 Installing rock
-🏃 swift build -c release
-🏃 rm -f /Users/vknabel/.rock/rocksets/global/bin/rock
-🏃 cp .build/release/rock /Users/vknabel/.rock/rocksets/global/bin
-✅ Successfully installed rock 🚀!
-```
+You may install 🚀, that are not listed in the [RockSpecs](https://github.com/vknabel/RockSpecs) repository by adding them to your `Rockfile`.
 
 ## Installation
 
