@@ -10,7 +10,7 @@ public extension RocketSpec {
           %? { RockError.rocketSourceCouldNotBeCloned(self, $0) }
     )
   }
-  
+
   public func checkout(branch: String, for project: RockProject) -> PromptRunner<RockError> {
     return project.mkSources()
       %& (
@@ -18,15 +18,15 @@ public extension RocketSpec {
           %? { RockError.rocketSourceCouldNotBeUpdated(self, $0) }
     )
   }
-  
+
   public func pull(for project: RockProject) -> PromptRunner<RockError> {
     return project.mkSources()
       %& (
-        project.repository(for: self).fetch(tags: true)
+        project.repository(for: self).pull()
           %? { RockError.rocketSourceCouldNotBeUpdated(self, $0) }
     )
   }
-  
+
   public func fetch(for project: RockProject) -> PromptRunner<RockError> {
     return project.mkSources()
       %& (

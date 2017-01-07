@@ -7,7 +7,7 @@ import PathKit
 struct InstallCommand: CommandProtocol {
   let verb: String = "install"
   let function: String = "Installs rockets. If no rockets are given, a project is assumed."
-  
+
   func run(_ options: ProjectDependencyOptions) -> Result<(), RockError> {
     // Always update
     let defaultSpecs = RockSpec()
@@ -17,7 +17,7 @@ struct InstallCommand: CommandProtocol {
       : report("Cloning specs repository", defaultSpecs.name.theme.coded, "from", defaultSpecs.url.theme.coded, format: .step)
       %& defaultSpecs.clone()
     _ = rockSpecs(Prompt())
-    
+
     switch options.inputs {
     case let .left(dependencies):
       return runGlobal(dependencies)
@@ -25,7 +25,7 @@ struct InstallCommand: CommandProtocol {
       return runProject(project)
     }
   }
-  
+
   func runGlobal(_ dependencies: [Dependency]) -> Result<(), RockError> {
     let project = RockProject(
       rockfile: Rockfile.global(with: dependencies),
@@ -33,7 +33,7 @@ struct InstallCommand: CommandProtocol {
     )
     return runProject(project)
   }
-  
+
   func runProject(_ project: RockProject) -> Result<(), RockError> {
     let rocketSpecs: Result<[(RocketSpec, Dependency.Version)], RockError> = project.rockfile.dependencies.flatMap {
       switch $0 { // into extension method
@@ -43,18 +43,19 @@ struct InstallCommand: CommandProtocol {
         return project.rocketSpec(named: name).map { ($0, version) }
       }
     }
-    
+
     if let specs = rocketSpecs.value {
       let specDescriptions = specs.map({ "\($0.0.name.theme.input)@\($0.1.theme.derived)" })
       let log = report("Installing", specDescriptions.joined(separator: ", "), format: .step) as PromptReporter
       _ = log(project.prompt)
     }
-    
+
     let install: Result<(), RockError> = rocketSpecs.flatMap({ rocketSpecs in
       rocketSpecs.flatMap({ (spec: (RocketSpec, Dependency.Version)) -> Result<Prompt, RockError> in
         let cloneOrFetch = project.sourcePath(for: spec.0).exists
           ? report("Updating", spec.1.theme.derived, "of", spec.0.name.theme.input, format: .step)
             %& Prompt.cd(project.sourcePath(for: spec.0))
+            %& spec.0.fetch(for: project)
             %& spec.0.checkout(branch: spec.1, for: project)
             %& spec.0.pull(for: project)
           : report("Cloning", spec.0.name.theme.input, "from", spec.0.url.theme.derived, "at", spec.1.theme.derived, format: .step)
