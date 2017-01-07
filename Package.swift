@@ -13,6 +13,6 @@ let package = Package(
     .Package(url: "https://github.com/behrang/YamlSwift.git", majorVersion: 3, minor: 3),
     .Package(url: "https://github.com/antitypical/Result.git", majorVersion: 3),
     .Package(url: "https://github.com/vknabel/Lens.git", majorVersion: 0, minor: 1),
-    .Package(url: "https://github.com/vknabel/PromptLine.git", majorVersion: 0, minor: 2),
+    .Package(url: "https://github.com/vknabel/PromptLine.git", majorVersion: 0, minor: 3),
   ]
 )
