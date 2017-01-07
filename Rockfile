@@ -1,0 +1,9 @@
+name: Rock
+dependencies:
+  - xcopen
+  - name: langserver-swift
+    url: https://github.com/RLovelett/langserver-swift
+    link: cp .build/release/LanguageServer $ROCK_PATH/bin/langserver-swift
+  - swiftlint
+  - name: sourcery
+    url: https://github.com/krzysztofzablocki/Sourcery

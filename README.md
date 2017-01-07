@@ -1,7 +1,8 @@
 # Rock
 
-With Rock you can easily install CLIs build with Swift Package Manager.
-The index of all supported libraries can be found on the [RockSpecs](https://github.com/vknabel/RockSpecs) repository.
+With Rock you can easily install CLIs built with Swift Package Manager locally and globally.
+The index of all supported libraries can be found on the [RockSpecs](https://github.com/vknabel/RockSpecs) repository,
+but you can declare your own at your `Rockfile`.
 
 ## Overview
 
@@ -9,30 +10,38 @@ Rockets (aka 🚀) are SwiftPM projects.
 Each 🚀 has a [RocketSpec](https://github.com/vknabel/RockSpecs/blob/master/default.yaml) which defines the Git url and how it has to be installed.
 The compiled 🚀 will be stored as binary inside the RockSet's bin folder.
 
-Rockets may be installed by using `rock install some_rocket`.
+Rockets may be installed globally by using `rock install some_rocket` and locally by creating a `Rockfile` containing all dependencies and running `rock install`.
 
-A RockSet is a namespace for 🚀 which is isolated from others.
+```yaml
+name: YourProject
+dependencies:
+  - empty # Just an empty dependency that installs fast
+  # Insert your dependencies here
+```
 
-***Note:*** *Currently only two RockSets called `global` and `local` is supported.*
+In order to install all your dependencies simply run:
+
+```bash
+$ rock install
+👉 Updating specs repository global
+Already up-to-date.
+👉 Installing empty@master
+👉 Updating master of empty
+Already on 'master'
+Your branch is up-to-date with 'origin/master'.
+Already up-to-date.
+👉 Building empty
+🏃 swift build -c release
+👉 Linking empty
+🏃 cp .build/release/$ROCKET_SPEC_NAME $ROCK_PATH/bin
+✅ Successfully installed empty
+```
 
 RockSpecs include many RocketSpecs. You can checkout the default one [here](https://github.com/vknabel/RockSpecs).
 
 ***Note:*** *Currently only the `default` RockSpec is supported.*
 
-You may install 🚀, that are not listed in the [RockSpecs](https://github.com/vknabel/RockSpecs) repository once you added them to your `local` RockSpec.
-
-```bash
-$ rock spec add vknabel/Rock --install --default
-👉 Cloning https://github.com/vknabel/RockSpecs to /Users/vknabel/.rock/rockspecs/default
-👉 Cloning rock
-👉 Checking swift version
-👉 rock requires Swift 3.0.1 (set by /Users/vknabel/nativedev/Rock/.swift-version)
-👉 Installing rock
-🏃 swift build -c release
-🏃 rm -f /Users/vknabel/.rock/rocksets/global/bin/rock
-🏃 cp .build/release/rock /Users/vknabel/.rock/rocksets/global/bin
-✅ Successfully installed rock 🚀!
-```
+You may install 🚀, that are not listed in the [RockSpecs](https://github.com/vknabel/RockSpecs) repository by adding them to your `Rockfile`.
 
 ## Installation
 
@@ -40,24 +49,22 @@ First add the rock-bin to your `$PATH` variable to your `.bashrc`, `.bash_profil
 
 ```bash
 export ROCK_PATH="$HOME/.rock" # default
-export PATH="$PATH:$ROCK_PATH/rocksets/global/bin"
+export PATH="$PATH:./.rock/bin:$ROCK_PATH/bin"
 ```
 
 Thereafter start 🎸ing your 🚀s by simply cloning the repository, building the swift module and installing rock itself.
 
 ```bash
-$ git clone https://github.com/vknabel/rock
-$ cd rock
+$ git clone https://github.com/vknabel/rock $ROCK_PATH/sources/rock
+$ cd $ROCK_PATH/sources/rock
 $ swift build
-$ ./.build/debug/rock install rock
+$ mkdir $ROCK_PATH/bin
+$ cp $ROCK_PATH/sources/rock/.build/debug/rock $ROCK_PATH/bin
 ```
 
 ## Limitations
 
-- Rock has been designed to support different environments, but it currently only supports `global` and `custom`. Later there will be `.rockset` files, that are similar to `.gemset` or `.swift-version` files.
 - Currently there is no version handling. Instead only the `master` branch will be checked out. Therefore `rock install` will only clone the targeted repository, whereas `rock update` will pull the current `master` branch.
-- Error messages are either poor or non-existent.
-- For now there is no mechanism to support global installations of libraries. This would allow to automatically fetch missing dependencies and run swift scripts on the fly (without compilation).
 
 ## Author
 
