@@ -7,7 +7,7 @@ import RockLib
 struct InitCommand: CommandProtocol {
   let verb: String = "init"
   let function: String = "Initializes an empty Rockfile"
-  
+
   func run(_ options: NoOptions<RockError>) -> Result<(), RockError> {
     let targetPath = Path.current
     let rockfilePath = targetPath + "Rockfile"
@@ -15,7 +15,7 @@ struct InitCommand: CommandProtocol {
       return Result(error: .rockfileAlreadyExists)
     }
     return Result<(), NSError>(attempt: {
-      try rockfilePath.write("name: \(targetPath.parent().lastComponentWithoutExtension)\ndependencies:\n  - xcopen")
+      try rockfilePath.write("name: \(targetPath.lastComponentWithoutExtension)\ndependencies:\n  - empty\n")
     }).mapError(RockError.rockfileCouldNotBeCreated)
   }
 }

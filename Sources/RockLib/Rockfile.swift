@@ -16,6 +16,13 @@ public enum Dependency {
   public typealias Version = String
   case named(Name, Version)
   case inlined(RocketSpec, Version)
+  
+  public static func from(string: String) -> Dependency? {
+    let fragments = string.components(separatedBy: "@")
+    guard let head = fragments.first else { return nil }
+    let version = fragments.dropFirst().first
+    return Dependency.named(head, version ?? "master")
+  }
 }
 
 public extension Dependency {
@@ -32,7 +39,7 @@ public extension Dependency {
       }
       return .failure(.notImplemented("Cannot handle dictionary dependencies without url and name"))
     case let .string(name):
-      return .success(.named(name, "master"))
+      return .success(Dependency.from(string: name) ?? .named(name, "master"))
     default:
       return .failure(.rockfileHasInvalidDependency)
     }

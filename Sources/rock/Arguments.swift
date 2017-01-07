@@ -13,13 +13,6 @@ extension Path: ArgumentProtocol {
 
 extension Dependency: ArgumentProtocol {
   public static var name = "rocket[@version]"
-  
-  public static func from(string: String) -> Dependency? {
-    let fragments = string.components(separatedBy: "@")
-    guard let head = fragments.first else { return nil }
-    let version = fragments.dropFirst().first
-    return Dependency.named(head, version ?? "master")
-  }
 }
 
 let projectOption = Option(key: "project", defaultValue: Path.current, usage: "The target project. It should contain the Rockfile")
