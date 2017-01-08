@@ -3,3 +3,4 @@ included: # paths to include during linting. `--path` is ignored if present.
 variable_name:
   excluded:
     - m
+line_length: 120
