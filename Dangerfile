@@ -18,10 +18,3 @@ no_changelog_entry = !git.modified_files.include?("CHANGELOG.md")
 if has_app_changes && no_changelog_entry && not_declared_trivial
   fail("Any changes to library code need a summary in the Changelog.")
 end
-
-# Look for prose issues
-prose.lint_files markdown_files
-
-# Look for spelling issues
-# prose.ignored_words = ["orta", "artsy", "cocoapods"]
-prose.check_spelling markdown_files

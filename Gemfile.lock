@@ -62,8 +62,6 @@ GEM
       kramdown (~> 1.5)
       octokit (~> 4.2)
       terminal-table (~> 1)
-    danger-prose (2.0.3)
-      danger
     escape (0.0.4)
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
@@ -109,7 +107,6 @@ PLATFORMS
 DEPENDENCIES
   cocoapods (= 1.2.0.beta.1)
   danger
-  danger-prose
 
 BUNDLED WITH
    1.13.6
