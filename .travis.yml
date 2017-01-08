@@ -13,6 +13,7 @@ script:
 cache:
   - bundler
   - directories:
+    - .rock
     - Packages
     - $HOME/.swiftenv
     - $HOME/.rock
