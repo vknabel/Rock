@@ -13,3 +13,5 @@ cache:
   - Packages
   - $HOME/.swiftenv
   - $HOME/.rock
+notifications:
+  email: false
