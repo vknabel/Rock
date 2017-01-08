@@ -1,5 +1,13 @@
 # Rock
 
+## Master
+
+### Non Breaking Changes
+
+- **[Project]** Added Swiftlint - @vknabel
+- **[Project]** Added Travis CI - @vknabel
+- **[Project]** Added Danger - @vknabel
+
 ## 0.2.0
 
 ### Breaking Changes

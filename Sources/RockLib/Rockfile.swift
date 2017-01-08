@@ -4,7 +4,9 @@ import Result
 import PathKit
 
 public extension Array {
-  func flatMap<ElementOfResult, ErrorOfResult: Error>(_ transform: (Element) -> Result<ElementOfResult, ErrorOfResult>) -> Result<[ElementOfResult], ErrorOfResult> {
+  func flatMap<ElementOfResult, ErrorOfResult: Error>(
+    _ transform: (Element) -> Result<ElementOfResult, ErrorOfResult>
+  ) -> Result<[ElementOfResult], ErrorOfResult> {
     return self.reduce(.success([]), { (previousResult, element) -> Result<[ElementOfResult], ErrorOfResult> in
       return previousResult.flatMap({ p in transform(element).map({ p + [$0] })})
     })
@@ -16,7 +18,7 @@ public enum Dependency {
   public typealias Version = String
   case named(Name, Version)
   case inlined(RocketSpec, Version)
-  
+
   public static func from(string: String) -> Dependency? {
     let fragments = string.components(separatedBy: "@")
     guard let head = fragments.first else { return nil }
@@ -86,7 +88,7 @@ public extension Rockfile {
     }
     return yaml.flatMap(Rockfile.fromYaml)
   }
-  
+
   public static func fromYaml(_ yaml: Yaml) -> Result<Rockfile, RockError> {
     guard case let .dictionary(root) = yaml
       else { return .failure(.rockfileMustContainDictionary) }

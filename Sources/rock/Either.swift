@@ -4,8 +4,11 @@ import Commandant
 enum Either<A, B> {
   case left(A)
   case right(B)
-  
-  static func options<ClientError: Error>(_ lhs: @escaping (CommandMode) -> Result<A, CommandantError<ClientError>>, _ rhs: @escaping (CommandMode) -> Result<B, CommandantError<ClientError>>) -> (CommandMode) -> Result<Either<A, B>, CommandantError<ClientError>> {
+
+  static func options<ClientError: Error>(
+      _ lhs: @escaping (CommandMode) -> Result<A, CommandantError<ClientError>>,
+      _ rhs: @escaping (CommandMode) -> Result<B, CommandantError<ClientError>>
+    ) -> (CommandMode) -> Result<Either<A, B>, CommandantError<ClientError>> {
     return { m in
       switch m {
       case .arguments(_):

@@ -14,7 +14,13 @@ struct InstallCommand: CommandProtocol {
     let rockSpecs = defaultSpecs.path.exists
       ? report("Updating specs repository", defaultSpecs.name.theme.coded, format: .step)
         %& defaultSpecs.update()
-      : report("Cloning specs repository", defaultSpecs.name.theme.coded, "from", defaultSpecs.url.theme.coded, format: .step)
+      : report(
+          "Cloning specs repository",
+          defaultSpecs.name.theme.coded,
+          "from",
+          defaultSpecs.url.theme.coded,
+          format: .step
+        )
       %& defaultSpecs.clone()
     _ = rockSpecs(Prompt())
 
@@ -34,8 +40,8 @@ struct InstallCommand: CommandProtocol {
     return runProject(project)
   }
 
-  func runProject(_ project: RockProject) -> Result<(), RockError> {
-    let rocketSpecs: Result<[(RocketSpec, Dependency.Version)], RockError> = project.rockfile.dependencies.flatMap {
+  func rocketSpecs(for project: RockProject) -> Result<[(RocketSpec, Dependency.Version)], RockError> {
+    return project.rockfile.dependencies.flatMap {
       switch $0 { // into extension method
       case let .inlined(spec, version):
         return Result.success((spec, version))
@@ -43,6 +49,9 @@ struct InstallCommand: CommandProtocol {
         return project.rocketSpec(named: name).map { ($0, version) }
       }
     }
+  }
+  func runProject(_ project: RockProject) -> Result<(), RockError> {
+    let rocketSpecs = self.rocketSpecs(for: project)
 
     if let specs = rocketSpecs.value {
       let specDescriptions = specs.map({ "\($0.0.name.theme.input)@\($0.1.theme.derived)" })
@@ -58,14 +67,23 @@ struct InstallCommand: CommandProtocol {
             %& spec.0.fetch(for: project)
             %& spec.0.checkout(branch: spec.1, for: project)
             %& spec.0.pull(for: project)
-          : report("Cloning", spec.0.name.theme.input, "from", spec.0.url.theme.derived, "at", spec.1.theme.derived, format: .step)
+          : report(
+              "Cloning",
+              spec.0.name.theme.input,
+              "from",
+              spec.0.url.theme.derived,
+              "at",
+              spec.1.theme.derived,
+              format: .step
+            )
             %& spec.0.clone(branch: spec.1, for: project)
             %& Prompt.cd(project.sourcePath(for: spec.0))
         let runner: PromptRunner<RockError> = cloneOrFetch
           %& Prompt.cd(project.sourcePath(for: spec.0))
           %& report("Building", spec.0.name.theme.input, format: .step)
           %& spec.0.buildRunner
-          %& (Prompt.mkpath(project.binariesPath) %? { _ in RockError.notImplemented("No error handler for mkpath binaries") })
+          %& (Prompt.mkpath(project.binariesPath)
+            %? { _ in RockError.notImplemented("No error handler for mkpath binaries") })
           %& report("Linking", spec.0.name.theme.input, format: .step)
           %& spec.0.linkRunner
           %& report("Successfully installed", spec.0.name.theme.input, format: .success)
