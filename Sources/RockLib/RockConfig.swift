@@ -18,20 +18,20 @@ import Result
 public struct RockConfig {
   internal static let rockPathEnvVar: String = "ROCK_PATH"
   public static let rockConfig = RockConfig()
-  
+
   public let rockPath: Path
-  
+
   public let buildScript = ["swift build -c release"]
   public let unlinkScript = ["rm -f $ROCK_PATH/bin/$ROCKET_SPEC_NAME"]
   public let linkScript = ["cp .build/release/$ROCKET_SPEC_NAME $ROCK_PATH/bin"]
   public let cleanScript = ["rm -rf .build"]
-  
+
   public init(
     rockPath: Path = Path(ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock").absolute()
   ) {
     self.rockPath = rockPath
   }
-  
+
   public var rockSpecsPath: Path {
     return rockPath + "specs"
   }

@@ -4,7 +4,7 @@ import PathKit
 
 public enum RockError: Error {
   case notImplemented(String)
-  
+
   case rockfileAlreadyExists
   case rockfileCouldNotBeCreated(Error)
   case rockfileMustContainDictionary
@@ -13,7 +13,7 @@ public enum RockError: Error {
   case rockfileHasInvalidDependency
   case rockfileIsNotValidYaml(String?)
   case rockfileCouldNotBeRead(Path, Error)
-  
+
   case couldNotCreateSourcesDirectory(PromptError)
 
   case specsJsonHasInvalidFormat
@@ -21,7 +21,7 @@ public enum RockError: Error {
   case specsJsonHasNoUrl(name: String)
 
   case rocketsCouldNotBeUninstalled(Error)
-  
+
   case allSpecsCouldNotBeDetermined
 
   case rocketBinaryCouldNotBeUnlinked(RocketSpec)

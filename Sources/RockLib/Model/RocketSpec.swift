@@ -82,7 +82,7 @@ public extension RocketSpec {
       clean: yaml["clean"].stringArray ?? []
     ))
   }
-  
+
   public static func fromPath(_ path: Path, named name: String) -> Result<RocketSpec, RockError> {
     let yaml = Result<Yaml, AnyError>(attempt: {
       do {

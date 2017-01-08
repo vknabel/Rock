@@ -9,6 +9,7 @@ install:
 script:
   - swift build
   - ./.build/debug/rock install
+  - swiftlint
   - bundle exec danger
 cache:
   - bundler
