@@ -51,7 +51,7 @@ struct InstallCommand: CommandProtocol {
     }
   }
   func runProject(_ project: RockProject) -> Result<(), RockError> {
-    let rocketSpecs = rocketSpecs(for: project)
+    let rocketSpecs = self.rocketSpecs(for: project)
 
     if let specs = rocketSpecs.value {
       let specDescriptions = specs.map({ "\($0.0.name.theme.input)@\($0.1.theme.derived)" })
