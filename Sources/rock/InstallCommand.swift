@@ -44,12 +44,18 @@ struct InstallCommand: CommandProtocol {
     return project.rockfile.dependencies.flatMap {
       switch $0 { // into extension method
       case let .inlined(spec, version):
-        return Result.success((spec, version))
+        let v: Dependency.Version = version  ?? "master"
+        return Result.success((spec, v))
       case let .named(name, version):
-        return project.rocketSpec(named: name).map { ($0, version) }
+        return project.rocketSpec(named: name).map { ($0, version ?? "master") }
+      case let .overriding(name, yaml, version):
+        return project.rocketSpec(named: name)
+          .map { $0.overriding(with: yaml) }
+          .map { ($0, version ?? "master") }
       }
     }
   }
+  
   func runProject(_ project: RockProject) -> Result<(), RockError> {
     let rocketSpecs = self.rocketSpecs(for: project)
 

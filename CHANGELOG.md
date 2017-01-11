@@ -2,6 +2,10 @@
 
 ## Master
 
+### Additions
+
+- **[Rockfile]** Overriding single properties in `Rockfile` are now supported - @vknabel
+
 ### Non Breaking Changes
 
 - **[Project]** Added Swiftlint - @vknabel

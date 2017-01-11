@@ -16,8 +16,9 @@ public extension Array {
 public enum Dependency {
   public typealias Name = String
   public typealias Version = String
-  case named(Name, Version)
-  case inlined(RocketSpec, Version)
+  case named(Name, Version?)
+  case inlined(RocketSpec, Version?)
+  case overriding(Name, Yaml, Version?)
 
   public static func from(string: String) -> Dependency? {
     let fragments = string.components(separatedBy: "@")
@@ -34,7 +35,7 @@ public extension Dependency {
       if case .some(.string(_)) = root["url"], case let .some(.string(name)) = root["name"] {
         return RocketSpec.fromYaml(yaml, named: name)
           .map {
-            Dependency.inlined($0, root["version"]?.string ?? "master")
+            Dependency.inlined($0, root["version"]?.string)
         }
       } else if case .some(.string(_)) = root["name"] {
         return .failure(.notImplemented("Dependencies by name are not supported yet"))
