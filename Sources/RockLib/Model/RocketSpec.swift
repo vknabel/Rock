@@ -13,6 +13,22 @@ private extension Yaml {
   }
 }
 
+fileprivate func nilIfEmpty<E>(_ array: [E]) -> [E]? {
+  if array.isEmpty {
+    return nil
+  } else {
+    return array
+  }
+}
+
+fileprivate func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
+  return (nilIfEmpty(raw) ?? fallback).map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+}
+
+fileprivate func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
+  return nilIfEmpty(raw)?.map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+}
+
 public struct RocketSpec {
   public typealias Runner = PromptRunner<RockError>
   public let name: String
@@ -37,6 +53,22 @@ public struct RocketSpec {
     self.unlinkRunner = unlink %? RockError.rocketSpecCouldNotBeUnlinked
     self.cleanRunner = clean %? RockError.rocketSpecCouldNotBeCleaned
   }
+  
+  public init(
+    name: String,
+    url: String,
+    buildRunner: @escaping Runner,
+    linkRunner: @escaping Runner,
+    unlinkRunner: @escaping Runner,
+    cleanRunner: @escaping Runner
+    ) {
+    self.name = name
+    self.url = url
+    self.buildRunner = buildRunner
+    self.linkRunner = linkRunner
+    self.unlinkRunner = unlinkRunner
+    self.cleanRunner = cleanRunner
+  }
 }
 
 public extension RocketSpec {
@@ -48,17 +80,6 @@ public extension RocketSpec {
     unlink: [String] = [],
     clean: [String] = []
   ) {
-    func nilIfEmpty<E>(_ array: [E]) -> [E]? {
-      if array.isEmpty {
-        return nil
-      } else {
-        return array
-      }
-    }
-    func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
-      return (nilIfEmpty(raw) ?? fallback).map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
-    }
-
     self.init(
       name: name,
       url: url,
@@ -71,6 +92,29 @@ public extension RocketSpec {
 }
 
 public extension RocketSpec {
+  public func overriding(with yaml: Yaml) -> RocketSpec {
+    let build: Runner = runnerFromStrings(yaml["build"].stringArray ?? [])
+      .map({ $0 %? RockError.rocketSpecCouldNotBeBuilt })
+      ?? buildRunner
+    let link: Runner = runnerFromStrings(yaml["link"].stringArray ?? [])
+      .map({ $0 %? RockError.rocketSpecCouldNotBeLinked })
+      ?? linkRunner
+    let unlink: Runner = runnerFromStrings(yaml["unlink"].stringArray ?? [])
+      .map({ $0 %? RockError.rocketSpecCouldNotBeUnlinked })
+      ?? unlinkRunner
+    let clean: Runner = runnerFromStrings(yaml["clean"].stringArray ?? [])
+      .map({ $0 %? RockError.rocketSpecCouldNotBeCleaned })
+      ?? cleanRunner
+    return RocketSpec(
+      name: yaml["name"].string ?? name,
+      url: yaml["url"].string ?? url,
+      buildRunner: build,
+      linkRunner: link,
+      unlinkRunner: unlink,
+      cleanRunner: clean
+    )
+  }
+  
   public static func fromYaml(_ yaml: Yaml, named name: String) -> Result<RocketSpec, RockError> {
     guard let url = yaml["url"].string else { return .failure(RockError.rocketSpecRequiresAnUrl(name: name)) }
     return .success(RocketSpec(
