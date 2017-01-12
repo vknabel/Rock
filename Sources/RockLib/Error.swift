@@ -5,6 +5,9 @@ import PathKit
 public enum RockError: Error {
   case notImplemented(String)
 
+  case rockfileCustomScriptFailed(String, PromptError)
+  case rockfileCustomScriptNotFound(String)
+
   case rockfileAlreadyExists
   case rockfileCouldNotBeCreated(Error)
   case rockfileMustContainDictionary

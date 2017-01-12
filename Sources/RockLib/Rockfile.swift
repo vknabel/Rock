@@ -2,6 +2,7 @@ import Foundation
 import Yaml
 import Result
 import PathKit
+import PromptLine
 
 public extension Array {
   func flatMap<ElementOfResult, ErrorOfResult: Error>(
@@ -64,11 +65,14 @@ public extension Dependency {
 ///   url: https://github.com/vknabel/xcopen
 /// ```
 public struct Rockfile {
+  public typealias Runner = PromptRunner<RockError>
+  
   public let name: String
   public let dependencies: [Dependency]
+  public let scriptRunners: [String: Runner]
 
   public static func global(with dependencies: [Dependency]) -> Rockfile {
-    return Rockfile(name: "global", dependencies: dependencies)
+    return Rockfile(name: "global", dependencies: dependencies, scriptRunners: [:])
   }
 }
 
@@ -77,7 +81,7 @@ public extension Rockfile {
     let yaml = Result<Yaml, AnyError>(attempt: {
       do {
         let text: String = try (path + "Rockfile").read()
-        return try Yaml.load(text)
+        return try Yaml.rendering(text)
       } catch {
         throw AnyError(error)
       }
@@ -99,7 +103,18 @@ public extension Rockfile {
     guard case let .some(.array(rawDependencies)) = root["dependencies"]
       else { return .failure(.rockfileMustHaveDependencies) }
     return rawDependencies.flatMap(Dependency.fromYaml).map {
-      Rockfile(name: name, dependencies: $0)
+      let scripts = (yaml.dictionary?["scripts"]?.dictionary ?? [:])
+        .reduce([String: Runner](), { (scripts, element) in
+          if let name = element.key.string, let shell = element.value.stringArray {
+            var scripts = scripts
+            scripts[name] = runnerFromStrings(shell, or: []) %? { RockError.rockfileCustomScriptFailed(name, $0) }
+            return scripts
+          } else {
+            return scripts
+          }
+        })
+      
+      return Rockfile(name: name, dependencies: $0, scriptRunners: scripts)
     }
   }
 }

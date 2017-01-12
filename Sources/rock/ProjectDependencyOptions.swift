@@ -19,3 +19,4 @@ struct ProjectRocketOptions: OptionsProtocol {
       <*> m <| Either<[Dependency.Name], RockProject>.options({ $0 <| rocketArguments }, RockProject.fromOptions)
   }
 }
+

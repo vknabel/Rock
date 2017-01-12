@@ -1,5 +1,14 @@
 name: Rock
+version: 0.2.1
 dependencies:
   - swiftlint@0.15.0
-  - name: sourcery
-    url: https://github.com/krzysztofzablocki/Sourcery
+  - sourcery@0.5.2
+scripts:
+  generate:
+    - sourcery Sources/RockLib/Generating Templates/RockLib Sources/RockLib/Generated/Version.generated.swift --args version={{ version }}
+    - sourcery Sources/RockLib/Generating Templates/Install Scripts/Install.generated.swift --args version={{ version }}
+  lint:
+    - swiftlint autocorrect
+    - swiftlint
+  meow:
+    - echo Meow {{ version }}

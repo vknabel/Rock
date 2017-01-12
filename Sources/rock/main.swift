@@ -30,6 +30,7 @@ main.register(InstallCommand())
 main.register(UninstallCommand())
 main.register(InitCommand())
 main.register(VersionCommand())
+main.register(RunCommand())
 main.register(HelpCommand(registry: main))
 
 main.main(defaultVerb: "help") { error in
