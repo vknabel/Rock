@@ -11,7 +11,7 @@ script:
   - swift build
   - ./.build/debug/rock install
   - ./.build/debug/rock test
-  - swiftlint
+  - ./.build/debug/rock run lint
   - bundle exec danger
 cache:
   - bundler
