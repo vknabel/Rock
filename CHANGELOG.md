@@ -8,6 +8,7 @@
 - **[Rock]** Now supports `rock run script` - @vknabel
 - **[Rockfile]** Every value in `Rockfile` will now be interpreted as Stencil template - @vknabel
 - **[Rockfile]** Overriding single properties in `Rockfile` is now supported - @vknabel
+- **[Other]** Provides experimental `Install.generated.swift` Installation Script - @vknabel
 
 ### Non Breaking Changes
 
