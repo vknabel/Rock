@@ -5,10 +5,13 @@
 ### Additions
 
 - **[Rock]** Now supports `rock version` - @vknabel
-- **[Rockfile]** Overriding single properties in `Rockfile` are now supported - @vknabel
+- **[Rock]** Now supports `rock run script` - @vknabel
+- **[Rockfile]** Every value in `Rockfile` will now be interpreted as Stencil template - @vknabel
+- **[Rockfile]** Overriding single properties in `Rockfile` is now supported - @vknabel
 
 ### Non Breaking Changes
 
+- **[Project]** Now uses krzysztofzablocki/Sourcery - @vknabel
 - **[Project]** Added Swiftlint - @vknabel
 - **[Project]** Added Travis CI - @vknabel
 - **[Project]** Added Danger - @vknabel
