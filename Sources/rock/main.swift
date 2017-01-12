@@ -1,6 +1,5 @@
 import Foundation
 import PathKit
-import Swiftline
 import Yaml
 import RockLib
 import Commandant

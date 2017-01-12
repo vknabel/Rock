@@ -1,4 +1,4 @@
-import Swiftline
+import ColorizeSwift
 
 public extension CustomStringConvertible {
   public var theme: ThemedString {
@@ -10,22 +10,22 @@ public struct ThemedString {
   fileprivate var string: String
 
   public var coded: String {
-    return string.foreground.Magenta
+    return string.magenta()
   }
 
   public var input: String {
-    return string.foreground.Blue
+    return string.blue()
   }
 
   public var derived: String {
-    return string.foreground.Cyan
+    return string.cyan()
   }
 
   public var error: String {
-    return string.foreground.Red
+    return string.red()
   }
 
   public var warn: String {
-    return string.foreground.Yellow
+    return string.yellow()
   }
 }
