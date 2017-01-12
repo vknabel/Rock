@@ -50,9 +50,9 @@ author:
   email: dev@vknabel.com
 scripts:
   hello: echo Hello {{ author.name }}
-  multi:
-    - echo line
-    - echo command
+  xcodeproj:
+    - swift package generate-xcodeproj
+    - open {{ name }}.xcodeproj
 ```
 
 Thereafter you are able to run all your scripts with ease:
@@ -60,6 +60,17 @@ Thereafter you are able to run all your scripts with ease:
 ```bash
 $ rock run hello
 Hello Valentin Knabel
+```
+
+Additionally there are convenience commands with default scripts made for the Swift Package Manager:
+
+```bash
+$ rock build
+🏃 swift build
+$ rock test
+🏃 swift test
+$ rock archive
+🏃 swift build -c release
 ```
 
 ### Global

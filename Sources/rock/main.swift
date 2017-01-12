@@ -33,15 +33,15 @@ main.register(VersionCommand())
 main.register(RunCommand())
 main.register(ScriptCommand(
   verb: "build",
-  function: "Executes the script defined in Rockfile named build."
+  function: "Builds the your project."
 ))
 main.register(ScriptCommand(
   verb: "test",
-  function: "Executes the script defined in Rockfile named test."
+  function: "Runs all your tests."
 ))
 main.register(ScriptCommand(
   verb: "archive",
-  function: "Executes the script defined in Rockfile named archive."
+  function: "Builds a release for your project."
 ))
 main.register(HelpCommand(registry: main))
 

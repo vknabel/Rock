@@ -9,6 +9,9 @@ scripts:
     - sourcery Sources/RockLib/Generating Templates/RockLib Sources/RockLib/Generated/Version.generated.swift --args version={{ version }}
     # Sets the version for the Swift Installer
     - sourcery Sources/RockLib/Generating Templates/Install Scripts/Install.generated.swift --args version={{ version }}
+  xcodeproj:
+    - swift package generate-xcodeproj
+    - open {{ name }}.xcodeproj
   lint:
     - swiftlint autocorrect
     - swiftlint
