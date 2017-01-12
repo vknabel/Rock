@@ -66,7 +66,7 @@ public extension Dependency {
 /// ```
 public struct Rockfile {
   public typealias Runner = PromptRunner<RockError>
-  
+
   public let name: String
   public let dependencies: [Dependency]
   public let scriptRunners: [String: Runner]
@@ -113,7 +113,7 @@ public extension Rockfile {
             return scripts
           }
         })
-      
+
       return Rockfile(name: name, dependencies: $0, scriptRunners: scripts)
     }
   }

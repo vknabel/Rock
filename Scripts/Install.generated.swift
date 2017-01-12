@@ -5,23 +5,26 @@
 import Foundation
 
 let rockPath = ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock"
-let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "{{rockfile.version}}"
+let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.2.1"
 
-func run(_ args: String...) {
+func run(workingDir: String? = nil, _ args: String...) {
   let process = Process()
   process.launchPath = "/usr/bin/env"
+  process.currentDirectoryPath = workingDir ?? process.currentDirectoryPath
   process.arguments = args
   process.launch()
-  process.waitUntilFinished()
+  process.waitUntilExit()
 }
 
+let wd = "\(rockPath)/sources/rock/"
 run(
   "git", "clone",
   "https://github.com/vknabel/Rock",
+  wd,
   "--depth", "1",
   "--branch", version
 )
-run("swift", "build", "-c", "release")
+run(workingDir: wd, "swift", "build", "-c", "release")
 run("mkdir", "-p", "\(rockPath)/bin")
 run("cp", "\(rockPath)/sources/rock/.build/debug/rock", "\(rockPath)/bin")
 

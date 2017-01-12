@@ -53,7 +53,7 @@ public struct RocketSpec {
     self.unlinkRunner = unlink %? RockError.rocketSpecCouldNotBeUnlinked
     self.cleanRunner = clean %? RockError.rocketSpecCouldNotBeCleaned
   }
-  
+
   public init(
     name: String,
     url: String,
@@ -114,7 +114,7 @@ public extension RocketSpec {
       cleanRunner: clean
     )
   }
-  
+
   public static func fromYaml(_ yaml: Yaml, named name: String) -> Result<RocketSpec, RockError> {
     guard let url = yaml["url"].string else { return .failure(RockError.rocketSpecRequiresAnUrl(name: name)) }
     return .success(RocketSpec(
