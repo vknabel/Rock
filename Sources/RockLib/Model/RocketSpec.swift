@@ -22,11 +22,11 @@ fileprivate func nilIfEmpty<E>(_ array: [E]) -> [E]? {
 }
 
 internal func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
-  return (nilIfEmpty(raw) ?? fallback).map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+  return (nilIfEmpty(raw) ?? fallback).map({ report($0.theme.derived, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
 }
 
-internal func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
-  return nilIfEmpty(raw)?.map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+public func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
+  return nilIfEmpty(raw)?.map({ report($0.theme.derived, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
 }
 
 public struct RocketSpec {
@@ -83,7 +83,7 @@ public extension RocketSpec {
     self.init(
       name: name,
       url: url,
-      build: runnerFromStrings(build, or: RockConfig.rockConfig.buildScript),
+      build: runnerFromStrings(build, or: RockConfig.rockConfig.archiveScript),
       link: runnerFromStrings(link, or: RockConfig.rockConfig.linkScript),
       unlink: runnerFromStrings(unlink, or: RockConfig.rockConfig.unlinkScript),
       clean: runnerFromStrings(clean, or: RockConfig.rockConfig.cleanScript)
