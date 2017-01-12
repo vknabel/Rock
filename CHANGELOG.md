@@ -18,6 +18,7 @@
 - **[Project]** Added Swiftlint - @vknabel
 - **[Project]** Added Travis CI - @vknabel
 - **[Project]** Added Danger - @vknabel
+- **[Dependencies]** Uses ColorizeSwift for terminal colors instead of Swiftline - @vknabel
 
 ## 0.2.0
 
