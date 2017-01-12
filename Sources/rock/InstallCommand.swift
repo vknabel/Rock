@@ -55,7 +55,7 @@ struct InstallCommand: CommandProtocol {
       }
     }
   }
-  
+
   func runProject(_ project: RockProject) -> Result<(), RockError> {
     let rocketSpecs = self.rocketSpecs(for: project)
 

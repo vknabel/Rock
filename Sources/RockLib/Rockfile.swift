@@ -16,6 +16,7 @@ public extension Array {
 public enum Dependency {
   public typealias Name = String
   public typealias Version = String
+
   case named(Name, Version?)
   case inlined(RocketSpec, Version?)
   case overriding(Name, Yaml, Version?)

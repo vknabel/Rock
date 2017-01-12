@@ -62,9 +62,12 @@ $ mkdir $ROCK_PATH/bin
 $ cp $ROCK_PATH/sources/rock/.build/debug/rock $ROCK_PATH/bin
 ```
 
+## Updates
+
+You may update rock by running `rock install rock@0.2.1`.
 ## Limitations
 
-- Currently there is no version handling. Instead only the `master` branch will be checked out. Therefore `rock install` will only clone the targeted repository, whereas `rock update` will pull the current `master` branch.
+- Currently there is no version handling. Instead only the `master` branch will be checked out, except you specify the branch directly. Therefore `rock install rocket@branch` will install the specific version.
 
 ## Author
 
