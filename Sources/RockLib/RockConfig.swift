@@ -21,7 +21,9 @@ public struct RockConfig {
 
   public let rockPath: Path
 
-  public let buildScript = ["swift build -c release"]
+  public let archiveScript = ["swift build -c release"]
+  public let debugBuildScript = ["swift build"]
+  public let testScript = ["swift test"]
   public let unlinkScript = ["rm -f $ROCK_PATH/bin/$ROCKET_SPEC_NAME"]
   public let linkScript = ["cp .build/release/$ROCKET_SPEC_NAME $ROCK_PATH/bin"]
   public let cleanScript = ["rm -rf .build"]
