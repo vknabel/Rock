@@ -16,13 +16,11 @@ struct ScriptCommand: CommandProtocol {
   let verb: String
   let script: String
   let function: String
-  let defaultScript: [String]
 
-  init(verb: String, script: String? = nil, defaultScript: [String] = [], function: String) {
+  init(verb: String, script: String? = nil, function: String) {
     self.verb = verb
     self.script = script ?? verb
     self.function = function
-    self.defaultScript = defaultScript
   }
 
   func run(_ options: ProjectOptions) -> Result<(), RockError> {
@@ -30,9 +28,6 @@ struct ScriptCommand: CommandProtocol {
     if let runner = options.project.rockfile.scriptRunners[self.script] {
       return runner(prompt)
         .map({ _ in () })
-    } else if let runner = runnerFromStrings(defaultScript) {
-      return (runner %? { RockError.rockfileCustomScriptFailed(self.script, $0) })(prompt)
-        .map { _ in () }
     } else {
       return .failure(RockError.rockfileCustomScriptNotFound(self.script))
     }

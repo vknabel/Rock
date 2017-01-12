@@ -103,8 +103,16 @@ public extension Rockfile {
     guard case let .some(.array(rawDependencies)) = root["dependencies"]
       else { return .failure(.rockfileMustHaveDependencies) }
     return rawDependencies.flatMap(Dependency.fromYaml).map {
+      let defaultScripts = [
+        "build": runnerFromStrings(yaml["build"].stringArray ?? [], or: RockConfig.rockConfig.debugBuildScript)
+          %? { RockError.rockfileCustomScriptFailed("build", $0) },
+        "test": runnerFromStrings(yaml["test"].stringArray ?? [], or: RockConfig.rockConfig.testScript)
+        %? { RockError.rockfileCustomScriptFailed("test", $0) },
+        "archive": runnerFromStrings(yaml["archive"].stringArray ?? [], or: RockConfig.rockConfig.archiveScript)
+        %? { RockError.rockfileCustomScriptFailed("archive", $0) }
+      ]
       let scripts = (yaml.dictionary?["scripts"]?.dictionary ?? [:])
-        .reduce([String: Runner](), { (scripts, element) in
+        .reduce(defaultScripts, { (scripts, element) in
           if let name = element.key.string, let shell = element.value.stringArray {
             var scripts = scripts
             scripts[name] = runnerFromStrings(shell, or: []) %? { RockError.rockfileCustomScriptFailed(name, $0) }
