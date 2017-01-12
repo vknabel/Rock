@@ -10,6 +10,7 @@ script:
   - set -o pipefail
   - swift build
   - ./.build/debug/rock install
+  - ./.build/debug/rock test
   - swiftlint
   - bundle exec danger
 cache:
