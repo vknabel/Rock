@@ -1,9 +1,10 @@
 # Rock
 
-## Master
+## 0.2.1
 
 ### Additions
 
+- **[Rock]** Now supports `rock version` - @vknabel
 - **[Rockfile]** Overriding single properties in `Rockfile` are now supported - @vknabel
 
 ### Non Breaking Changes
