@@ -15,10 +15,10 @@ scripts:
     - open {{ name }}.xcodeproj
   publish:
     # Set git tag
-    - git tag -a "{{ version }}" -m "{{ version }}"
+    - git tag -a {{ version }} -m {{ version }}
     - git push --tags
     # Later: Release to CocoaPods
-    - echo https://github.com/vknabel/Rock/releases/edit/{{ version }}
+    - open https://github.com/vknabel/Rock/releases/new?tag={{ version }}
   lint:
     - swiftlint autocorrect
     - swiftlint
