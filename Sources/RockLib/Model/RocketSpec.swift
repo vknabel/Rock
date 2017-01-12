@@ -3,7 +3,7 @@ import Result
 import PathKit
 import Yaml
 
-private extension Yaml {
+internal extension Yaml {
   var stringArray: [String]? {
     if let s = string {
       return [s]
@@ -21,12 +21,12 @@ fileprivate func nilIfEmpty<E>(_ array: [E]) -> [E]? {
   }
 }
 
-fileprivate func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
-  return (nilIfEmpty(raw) ?? fallback).map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+internal func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
+  return (nilIfEmpty(raw) ?? fallback).map({ report($0.theme.derived, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
 }
 
-fileprivate func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
-  return nilIfEmpty(raw)?.map({ report($0, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+public func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
+  return nilIfEmpty(raw)?.map({ report($0.theme.derived, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
 }
 
 public struct RocketSpec {
@@ -53,7 +53,7 @@ public struct RocketSpec {
     self.unlinkRunner = unlink %? RockError.rocketSpecCouldNotBeUnlinked
     self.cleanRunner = clean %? RockError.rocketSpecCouldNotBeCleaned
   }
-  
+
   public init(
     name: String,
     url: String,
@@ -83,7 +83,7 @@ public extension RocketSpec {
     self.init(
       name: name,
       url: url,
-      build: runnerFromStrings(build, or: RockConfig.rockConfig.buildScript),
+      build: runnerFromStrings(build, or: RockConfig.rockConfig.archiveScript),
       link: runnerFromStrings(link, or: RockConfig.rockConfig.linkScript),
       unlink: runnerFromStrings(unlink, or: RockConfig.rockConfig.unlinkScript),
       clean: runnerFromStrings(clean, or: RockConfig.rockConfig.cleanScript)
@@ -114,7 +114,7 @@ public extension RocketSpec {
       cleanRunner: clean
     )
   }
-  
+
   public static func fromYaml(_ yaml: Yaml, named name: String) -> Result<RocketSpec, RockError> {
     guard let url = yaml["url"].string else { return .failure(RockError.rocketSpecRequiresAnUrl(name: name)) }
     return .success(RocketSpec(
@@ -131,7 +131,7 @@ public extension RocketSpec {
     let yaml = Result<Yaml, AnyError>(attempt: {
       do {
         let text: String = try path.read()
-        return try Yaml.load(text)
+        return try Yaml.rendering(text)
       } catch {
         throw AnyError(error)
       }

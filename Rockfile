@@ -1,5 +1,25 @@
 name: Rock
+version: 0.2.1
 dependencies:
   - swiftlint@0.15.0
-  - name: sourcery
-    url: https://github.com/krzysztofzablocki/Sourcery
+  - sourcery@0.5.2
+scripts:
+  generate:
+    # Injects version into `RockLib` and `rock`
+    - sourcery Sources/RockLib/Generating Templates/RockLib Sources/RockLib/Generated/Version.generated.swift --args version={{ version }}
+    # Sets the version for the Swift Installer
+    - sourcery Sources/RockLib/Generating Templates/Install Scripts/Install.generated.swift --args version={{ version }}
+  xcodeproj:
+    # Generate Project. Optionally: customize
+    - swift package generate-xcodeproj
+    - open {{ name }}.xcodeproj
+  publish:
+    # Set git tag
+    - git tag -a "{{ version }}" -m "{{ version }}"
+    - git push --tags
+    # Later: Release to CocoaPods
+    - echo https://github.com/vknabel/Rock/releases/edit/{{ version }}
+  lint:
+    - swiftlint autocorrect
+    - swiftlint
+

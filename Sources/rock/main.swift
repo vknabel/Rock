@@ -30,6 +30,19 @@ main.register(InstallCommand())
 main.register(UninstallCommand())
 main.register(InitCommand())
 main.register(VersionCommand())
+main.register(RunCommand())
+main.register(ScriptCommand(
+  verb: "build",
+  function: "Builds the your project."
+))
+main.register(ScriptCommand(
+  verb: "test",
+  function: "Runs all your tests."
+))
+main.register(ScriptCommand(
+  verb: "archive",
+  function: "Builds a release for your project."
+))
 main.register(HelpCommand(registry: main))
 
 main.main(defaultVerb: "help") { error in
