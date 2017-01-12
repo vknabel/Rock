@@ -100,7 +100,7 @@ public extension Yaml {
   public static func rendering(
     _ text: String,
     namespace: Namespace = Namespace(),
-    orderedBy order: [Yaml] = ["constants", "version", "license", "name", "email"]
+    orderedBy order: [Yaml] = ["constants", "version", "license", "name", "url"]
   ) throws -> Yaml {
     return try rendering(text, namespace: namespace, sort: sortDescriptor(by: order))
   }
