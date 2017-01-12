@@ -10,5 +10,4 @@ scripts:
   lint:
     - swiftlint autocorrect
     - swiftlint
-  meow:
-    - echo Meow {{ version }}
+
