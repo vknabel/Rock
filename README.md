@@ -113,7 +113,7 @@ $ cp $ROCK_PATH/sources/rock/.build/debug/rock $ROCK_PATH/bin
 Alternatively you may try out our Swift Installer (you still need to set up your `$PATH` and `ROCK_PATH`):
 
 ```bash
-$ curl -sL https://raw.githubusercontent.com/vknabel/Rock/master/Scripts/Install.generated.swift | swift
+$ curl -sL https://raw.githubusercontent.com/vknabel/Rock/master/Scripts/Install.generated.swift | swift -
 ```
 
 ### Updates
