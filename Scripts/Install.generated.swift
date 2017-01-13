@@ -26,7 +26,7 @@ run(
 )
 run(workingDir: wd, "swift", "build", "-c", "release")
 run("mkdir", "-p", "\(rockPath)/bin")
-run("cp", "\(rockPath)/sources/rock/.build/debug/rock", "\(rockPath)/bin")
+run("cp", "\(rockPath)/sources/rock/.build/release/rock", "\(rockPath)/bin")
 
 print("\n\nDon't forget to add $PATH and $ROCK_PATH to your profile:")
 print("   export ROCK_PATH=\"$HOME/.rock\"")
