@@ -7,21 +7,21 @@ public struct Repository {
 
   public func create() -> PromptRunner<PromptError> {
     return Prompt.mkpath(path)
-      %& Prompt.chdir(path, run: >-"git init")
+      %& Prompt.chdir(self.path, run: >-"git init")
   }
 
   public func clone(url: String, branch: String = "master") -> PromptRunner<PromptError> {
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
-        path.parent(),
-        run: >-["git", "clone", "--recursive", "--depth", "1", url, "--branch", branch, path.description]
+        self.path.parent(),
+        run: >-["git", "clone", "--recursive", "--depth", "1", url, "--branch", branch, self.path.description]
     )
   }
 
   public func checkout(branch: String) -> PromptRunner<PromptError> {
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
-        path,
+        self.path,
         run: >-["git", "checkout", branch]
     )
   }
@@ -29,7 +29,7 @@ public struct Repository {
   public func pull() -> PromptRunner<PromptError> {
     return Prompt.mkpath(path)
       %& Prompt.chdir(
-        path,
+        self.path,
         run: >-"git pull"
     )
   }
@@ -37,7 +37,7 @@ public struct Repository {
   public func fetch(tags: Bool = false) -> PromptRunner<PromptError> {
     return Prompt.mkpath(path)
       %& Prompt.chdir(
-        path,
+        self.path,
         run: >-(tags ? "git fetch --tags" : "git fetch")
     )
   }

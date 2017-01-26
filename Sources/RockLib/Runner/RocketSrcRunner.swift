@@ -6,7 +6,7 @@ public extension RocketSpec {
   public func clone(branch: String = "master", for project: RockProject) -> PromptRunner<RockError> {
     return project.mkSources()
       %& (
-        project.repository(for: self).clone(url: url, branch: branch)
+        project.repository(for: self).clone(url: self.url, branch: branch)
           %? { RockError.rocketSourceCouldNotBeCloned(self, $0) }
     )
   }

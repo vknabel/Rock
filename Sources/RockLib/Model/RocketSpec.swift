@@ -22,11 +22,13 @@ fileprivate func nilIfEmpty<E>(_ array: [E]) -> [E]? {
 }
 
 internal func runnerFromStrings(_ raw: [String], or fallback: [String]) -> PromptRunner<PromptError> {
-  return (nilIfEmpty(raw) ?? fallback).map({ report($0.theme.derived, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+  return (nilIfEmpty(raw) ?? fallback).map({ report($0.theme.derived, format: .script) %& >-$0 })
+    .reduce(zeroRunner, { $0 %& $1 })
 }
 
 public func runnerFromStrings(_ raw: [String]) -> PromptRunner<PromptError>? {
-  return nilIfEmpty(raw)?.map({ report($0.theme.derived, format: .script) %& >-$0 }).reduce(zeroRunner, %&)
+  return nilIfEmpty(raw)?.map({ report($0.theme.derived, format: .script) %& >-$0 })
+    .reduce(zeroRunner, { $0 %& $1 })
 }
 
 public struct RocketSpec {

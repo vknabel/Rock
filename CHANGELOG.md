@@ -1,5 +1,15 @@
 # Rock
 
+## 0.2.2
+
+### Additions
+
+- **[Rockfile]** Now supports more complex bash commands including &&
+
+### Non Breaking Changes
+
+- **[Dependencies]** Updated PromptLine for shell execution
+
 ## 0.2.1
 
 ### Additions
