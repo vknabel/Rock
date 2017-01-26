@@ -1,5 +1,5 @@
 name: Rock
-version: 0.2.1
+version: 0.2.2
 dependencies:
   - swiftlint@0.15.0
   - sourcery@0.5.2
