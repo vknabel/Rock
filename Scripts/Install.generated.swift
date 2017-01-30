@@ -4,6 +4,10 @@
 
 import Foundation
 
+#if os(Linux)
+typealias Process = Task
+#endif
+
 let rockPath = ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock"
 let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.2.2"
 
