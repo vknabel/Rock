@@ -28,7 +28,7 @@ run(
   "--depth", "1",
   "--branch", version
 )
-run(workingDir: wd, "swift", "build", "-c", "release")
+run(workingDir: wd, "bash", "-c", "cd \"\(wd)\" && swift build -c release")
 run("mkdir", "-p", "\(rockPath)/bin")
 run("cp", "\(rockPath)/sources/rock/.build/release/rock", "\(rockPath)/bin")
 
