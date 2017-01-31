@@ -40,6 +40,6 @@ scripts:
     # Copy latest Changelog
     - "sed -n /'^## {{version}}$'/,/'^## '/p CHANGELOG.md | sed -e '$ d' | pbcopy"
     # Create new release on Github
-    - open https://github.com/{{author.github}}/{{name}}/releases/new?tag={{version}}
+    - open https://github.com/vknabel/{{name}}/releases/new?tag={{version}}
     # Publish to CocoaPods
     # - bundle exec pod trunk push {{name}}.podspec --allow-warnings --swift-version=3.0
