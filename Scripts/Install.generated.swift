@@ -4,6 +4,10 @@
 
 import Foundation
 
+#if os(Linux)
+typealias Process = Task
+#endif
+
 let rockPath = ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock"
 let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.2.3"
 
@@ -24,7 +28,7 @@ run(
   "--depth", "1",
   "--branch", version
 )
-run(workingDir: wd, "swift", "build", "-c", "release")
+run(workingDir: wd, "bash", "-c", "cd \"\(wd)\" && swift build -c release")
 run("mkdir", "-p", "\(rockPath)/bin")
 run("cp", "\(rockPath)/sources/rock/.build/release/rock", "\(rockPath)/bin")
 
