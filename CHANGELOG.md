@@ -1,5 +1,11 @@
 # Rock
 
+## 0.2.3
+
+### Non Breaking Changes
+
+- **[Rock]** Improved `rock init`
+
 ## 0.2.2
 
 ### Additions

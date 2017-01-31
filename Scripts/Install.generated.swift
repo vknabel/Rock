@@ -1,11 +1,11 @@
-// Generated using Sourcery 0.5.2 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.5.3 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 
 import Foundation
 
 let rockPath = ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock"
-let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.2.1"
+let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.2.3"
 
 func run(workingDir: String? = nil, _ args: String...) {
   let process = Process()

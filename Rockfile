@@ -1,25 +1,45 @@
 name: Rock
-version: 0.2.2
+version: 0.2.3
+author:
+  name: Valentin Knabel
+  github: vknabel
 dependencies:
   - swiftlint@0.15.0
   - sourcery@0.5.2
 scripts:
-  generate:
-    # Injects version into `RockLib` and `rock`
-    - sourcery Sources/RockLib/Generating Templates/RockLib Sources/RockLib/Generated/Version.generated.swift --args version={{ version }}
-    # Sets the version for the Swift Installer
-    - sourcery Sources/RockLib/Generating Templates/Install Scripts/Install.generated.swift --args version={{ version }}
+  # build, test, install and clean are inferred
   xcodeproj:
     # Generate Project. Optionally: customize
-    - swift package generate-xcodeproj
-    - open {{ name }}.xcodeproj
-  publish:
-    # Set git tag
-    - git tag -a {{ version }} -m {{ version }}
-    - git push --tags
-    # Later: Release to CocoaPods
-    - open https://github.com/vknabel/Rock/releases/new?tag={{ version }}
+    - swift package generate-xcodeproj --enable-code-coverage
+    - open {{name}}.xcodeproj
+  generate:
+    # Injects version into `RockLib` and `rock`
+    - sourcery Sources/RockLib/Generating Templates/RockLib Sources/RockLib/Generated/Version.generated.swift --args version={{version}}
+    # Sets the version for the Swift Installer
+    - sourcery Sources/RockLib/Generating Templates/Install Scripts/Install.generated.swift --args version={{version}}
   lint:
     - swiftlint autocorrect
     - swiftlint
-
+  prepublish:
+    - rock run generate
+    - rock run lint
+  publish:
+    - rock run prepublish
+    # Releases may only be made on branch master
+    - |
+        if [ $(git branch | grep \* | cut -d ' ' -f2) != "master" ]
+        then
+          echo Releases must be created from branch master
+          exit 1
+        fi
+    # Assert clean working directory
+    - "git diff --exit-code > /dev/null"
+    # Set git tag
+    - git tag -a {{version}} -m {{version}}
+    - git push --tags
+    # Copy latest Changelog
+    - "sed -n /'^## {{version}}$'/,/'^## '/p CHANGELOG.md | sed -e '$ d' | pbcopy"
+    # Create new release on Github
+    - open https://github.com/{{author.github}}/{{name}}/releases/new?tag={{version}}
+    # Publish to CocoaPods
+    # - bundle exec pod trunk push {{name}}.podspec --allow-warnings --swift-version=3.0
