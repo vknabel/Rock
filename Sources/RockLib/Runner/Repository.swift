@@ -11,17 +11,10 @@ public struct Repository {
   }
 
   public func clone(url: String, branch: String = "master") -> PromptRunner<PromptError> {
-    let cmd: String = [
-      "git clone --depth 1",
-      "\"\(url)\"",
-      "--branch \"\(branch)\"",
-      "\"\(self.path.description)\"",
-      "> /dev/null"
-    ].reduce("") { "\($0) $($1)" }
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
         self.path.parent(),
-        run: >-cmd
+        run: >-["git", "clone", "--depth", "1", url, "--branch", branch, self.path.description]
     )
   }
 
