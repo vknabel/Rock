@@ -7,14 +7,21 @@ public struct Repository {
 
   public func create() -> PromptRunner<PromptError> {
     return Prompt.mkpath(path)
-      %& Prompt.chdir(self.path, run: >-"git init")
+      %& Prompt.chdir(self.path, run: >-"git init > /dev/null")
   }
 
   public func clone(url: String, branch: String = "master") -> PromptRunner<PromptError> {
+    let cmd: String = [
+      "git clone --recursive --depth 1",
+      "\"\(url)\"",
+      "--branch \"\(branch)\"",
+      "\"\(self.path.description)\"",
+      "> /dev/null"
+    ].reduce("") { "\($0) $($1)" }
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
         self.path.parent(),
-        run: >-["git", "clone", "--recursive", "--depth", "1", url, "--branch", branch, self.path.description]
+        run: >-cmd
     )
   }
 
@@ -22,7 +29,7 @@ public struct Repository {
     return Prompt.mkpath(path.parent())
       %& Prompt.chdir(
         self.path,
-        run: >-["git", "checkout", branch]
+        run: >-"git checkout \"\(branch)\" > /dev/null"
     )
   }
 
@@ -30,7 +37,7 @@ public struct Repository {
     return Prompt.mkpath(path)
       %& Prompt.chdir(
         self.path,
-        run: >-"git pull"
+        run: >-"git pull > /dev/null"
     )
   }
 
@@ -38,7 +45,7 @@ public struct Repository {
     return Prompt.mkpath(path)
       %& Prompt.chdir(
         self.path,
-        run: >-(tags ? "git fetch --tags" : "git fetch")
+        run: >-(tags ? "git fetch --tags > /dev/null" : "git fetch > /dev/null")
     )
   }
 }

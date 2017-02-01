@@ -92,6 +92,8 @@ struct InstallCommand: CommandProtocol {
             %? { _ in RockError.notImplemented("No error handler for mkpath binaries") })
           %& report("Linking", spec.0.name.theme.input, format: .step)
           %& spec.0.linkRunner
+          %& report("Cleaning", spec.0.name.theme.input, format: .step)
+          %& spec.0.cleanRunner
           %& report("Successfully installed", spec.0.name.theme.input, format: .success)
         return runner(project.prompt
           .declare("ROCK_SPEC_VERSION", as: spec.1)

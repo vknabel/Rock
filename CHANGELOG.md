@@ -1,5 +1,17 @@
 # Rock
 
+## 0.2.4
+
+### Additions
+
+- **[Rockfile]** Reintroduces `clean` phase
+
+### Non Breaking Changes
+
+- **[Rockfile]** Rockfiles now interpret `"const", "constant"` keys first
+- **[Rock]** Fixes second name line on `rock init`
+- **[Rock]** Reduces output noise of rock itself
+
 ## 0.2.3
 
 ### Non Breaking Changes
