@@ -12,7 +12,7 @@ public struct Repository {
 
   public func clone(url: String, branch: String = "master") -> PromptRunner<PromptError> {
     let cmd: String = [
-      "git clone --recursive --depth 1",
+      "git clone --depth 1",
       "\"\(url)\"",
       "--branch \"\(branch)\"",
       "\"\(self.path.description)\"",

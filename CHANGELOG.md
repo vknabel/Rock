@@ -15,6 +15,7 @@
 - **[Rockfile]** Rockfiles now interpret `"const", "constant"` keys first
 - **[Rock]** Fixes second name line on `rock init`
 - **[Rock]** Reduces output noise of rock itself
+- **[Rock]** Clones are not recursive anymore
 
 ## 0.2.3
 
