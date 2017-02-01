@@ -30,6 +30,7 @@ scripts:
     - swiftlint
   prepublish:
     - rock run generate
+    # Run your linter before publishing
     - rock lint
     # Releases may only be made on branch master
     - |

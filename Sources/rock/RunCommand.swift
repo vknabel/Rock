@@ -14,10 +14,6 @@ struct RunProjectOptions: OptionsProtocol {
   }
 }
 
-private func >- <E: Error>(prompt: Prompt, runner: PromptRunner<E>) -> Result<Prompt, E> {
-  return runner(prompt)
-}
-
 struct RunCommand: CommandProtocol {
     let verb: String = "run"
     let function: String = "Executes a script defined in your Rockfile."

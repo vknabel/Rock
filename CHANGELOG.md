@@ -8,6 +8,7 @@
 - **[Rock]** Added `rock lint` as an alias
 - **[Rock]** Added `rock publish` as an alias
 - **[Rock]** Added `rock init` generates improved data
+- **[Rock]** Added `rock init` now tells you that it has succeeded
 - **[Rockfile]** Reintroduces `clean` phase
 
 ### Non Breaking Changes

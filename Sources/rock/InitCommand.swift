@@ -3,12 +3,14 @@ import Commandant
 import Result
 import PathKit
 import RockLib
+import PromptLine
 
 struct InitCommand: CommandProtocol {
   let verb: String = "init"
   let function: String = "Initializes an empty Rockfile"
 
   func run(_ options: NoOptions<RockError>) -> Result<(), RockError> {
+    let prompt = Prompt()
     let targetPath = Path.current
     let rockfilePath = targetPath + "Rockfile"
     if rockfilePath.exists {
@@ -68,5 +70,7 @@ struct InitCommand: CommandProtocol {
       ].reduce("name: \(targetPath.lastComponentWithoutExtension)") { "\($0)\n\($1)"}
       try rockfilePath.write(rockfile)
     }).mapError(RockError.rockfileCouldNotBeCreated)
+    .flatMap { _ in prompt >- report("Successfully created your", "Rockfile".theme.coded + "!", format: .success) }
+    .map { _ in () }
   }
 }

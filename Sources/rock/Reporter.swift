@@ -1,5 +1,10 @@
 import RockLib
+import Result
 import PromptLine
+
+internal func >- <E: Error>(prompt: Prompt, runner: PromptRunner<E>) -> Result<Prompt, E> {
+  return runner(prompt)
+}
 
 extension ReporterFormat {
   static var phase = ReporterFormat(prefix: "🏎")
