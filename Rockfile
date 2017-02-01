@@ -21,8 +21,6 @@ scripts:
   prepublish:
     - rock run generate
     - rock run lint
-  publish:
-    - rock run prepublish
     # Releases may only be made on branch master
     - |
         if [ $(git branch | grep \* | cut -d ' ' -f2) != "master" ]
@@ -30,6 +28,7 @@ scripts:
           echo Releases must be created from branch master
           exit 1
         fi
+  publish:
     # Assert clean working directory
     - "git diff --exit-code > /dev/null"
     # Set git tag

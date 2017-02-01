@@ -2,6 +2,7 @@ import RockLib
 import PromptLine
 
 extension ReporterFormat {
+  static var phase = ReporterFormat(prefix: "🏎")
   static var step = ReporterFormat(prefix: "👉")
   static var success = ReporterFormat(prefix: "✅")
   static var question = ReporterFormat(prefix: "❓", terminator: "")

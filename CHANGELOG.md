@@ -7,6 +7,7 @@
 - **[Rock]** Added pre- and post-hooks for all scripts
 - **[Rock]** Added `rock lint` as an alias
 - **[Rock]** Added `rock publish` as an alias
+- **[Rock]** Added `rock init` generates improved data
 - **[Rockfile]** Reintroduces `clean` phase
 
 ### Non Breaking Changes

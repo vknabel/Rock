@@ -28,7 +28,10 @@ struct RunCommand: CommandProtocol {
         let prompt = options.project.prompt.lensWorkingDirectory(to: ".")
         let preRunner = runners["pre" + options.script] ?? Result.success
         let postRunner = runners["post" + options.script] ?? Result.success
-        return (prompt >- preRunner %& runner %& postRunner)
+        return (prompt >- report("Running", "pre\(options.script)".theme.derived, format: .phase) %& preRunner
+            %& report("Running", options.script.theme.input, format: .phase) %& runner
+            %& report("Running", "post\(options.script)".theme.derived, format: .phase) %& postRunner
+          )
           .map({ _ in () })
       } else {
         return .failure(RockError.rockfileCustomScriptNotFound(options.script))
