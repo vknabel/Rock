@@ -2,5 +2,5 @@
 // DO NOT EDIT
 
 public extension RockConfig {
-  public static let version = "0.2.4"
+  public static let version = "0.3.0"
 }

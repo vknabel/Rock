@@ -120,7 +120,7 @@ $ curl -sL https://raw.githubusercontent.com/vknabel/Rock/master/Scripts/Install
 
 Rock can be updated by simply running installing itself with a version specified.
 ```bash
-$ rock install rock@0.2.4
+$ rock install rock@0.3.0
 ```
 
 ## Limitations
