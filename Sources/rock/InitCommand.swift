@@ -16,7 +16,6 @@ struct InitCommand: CommandProtocol {
     }
     return Result<(), NSError>(attempt: {
       let rockfile = [
-        "name: \(targetPath.lastComponentWithoutExtension)",
         "version: 0.1.0",
         "# Dependencies may be installed locally by running `rock install`",
         "# If you like you can even delcare Specs inline or override specific scripts.",
