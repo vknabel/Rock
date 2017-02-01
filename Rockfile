@@ -1,8 +1,6 @@
 name: Rock
-version: 0.2.4
-author:
-  name: Valentin Knabel
-  github: vknabel
+version: 0.3.0
+url: https://github.com/vknabel/Rock
 dependencies:
   - swiftlint@0.15.0
   - sourcery@0.5.2
@@ -40,6 +38,6 @@ scripts:
     # Copy latest Changelog
     - "sed -n /'^## {{version}}$'/,/'^## '/p CHANGELOG.md | sed -e '$ d' | pbcopy"
     # Create new release on Github
-    - open https://github.com/vknabel/{{name}}/releases/new?tag={{version}}
+    - open {{url}}/releases/new?tag={{version}}
     # Publish to CocoaPods
     # - bundle exec pod trunk push {{name}}.podspec --allow-warnings --swift-version=3.0

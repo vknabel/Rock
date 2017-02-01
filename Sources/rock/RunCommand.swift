@@ -14,13 +14,21 @@ struct RunProjectOptions: OptionsProtocol {
   }
 }
 
+private func >- <E: Error>(prompt: Prompt, runner: PromptRunner<E>) -> Result<Prompt, E> {
+  return runner(prompt)
+}
+
 struct RunCommand: CommandProtocol {
     let verb: String = "run"
     let function: String = "Executes a script defined in your Rockfile."
 
     func run(_ options: RunProjectOptions) -> Result<(), RockError> {
-      if let runner = options.project.rockfile.scriptRunners[options.script] {
-        return runner(options.project.prompt.lensWorkingDirectory(to: "."))
+      let runners = options.project.rockfile.scriptRunners
+      if let runner = runners[options.script] {
+        let prompt = options.project.prompt.lensWorkingDirectory(to: ".")
+        let preRunner = runners["pre" + options.script] ?? Result.success
+        let postRunner = runners["post" + options.script] ?? Result.success
+        return (prompt >- preRunner %& runner %& postRunner)
           .map({ _ in () })
       } else {
         return .failure(RockError.rockfileCustomScriptNotFound(options.script))

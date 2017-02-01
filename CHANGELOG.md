@@ -1,9 +1,12 @@
 # Rock
 
-## 0.2.4
+## 0.3.0
 
 ### Additions
 
+- **[Rock]** Added pre- and post-hooks for all scripts
+- **[Rock]** Added `rock lint` as an alias
+- **[Rock]** Added `rock publish` as an alias
 - **[Rockfile]** Reintroduces `clean` phase
 
 ### Non Breaking Changes

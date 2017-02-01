@@ -27,6 +27,13 @@ public struct RockConfig {
   public let unlinkScript = ["rm -f $ROCK_PATH/bin/$ROCKET_SPEC_NAME"]
   public let linkScript = ["cp .build/release/$ROCKET_SPEC_NAME $ROCK_PATH/bin"]
   public let cleanScript = ["git checkout -- ."]
+  public let lintScript = ["swiftlint autocorrect", "swiftlint"]
+  public let prepublishScript = ["rock lint"]
+  public let publishScript = [
+    "echo \"There is no default publish script.\nSee https://github.com/vknabel/Rock/blob/master/Rockfile\" >&2",
+    "exit 1"
+  ]
+  public let postpublishScript = [""]
 
   public init(
     rockPath: Path = Path(ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock").absolute()

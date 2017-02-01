@@ -24,12 +24,8 @@ struct ScriptCommand: CommandProtocol {
   }
 
   func run(_ options: ProjectOptions) -> Result<(), RockError> {
-    let prompt = options.project.prompt.lensWorkingDirectory(to: ".")
-    if let runner = options.project.rockfile.scriptRunners[self.script] {
-      return runner(prompt)
-        .map({ _ in () })
-    } else {
-      return .failure(RockError.rockfileCustomScriptNotFound(self.script))
-    }
+    return RunCommand().run(
+      RunProjectOptions(project: options.project, script: script)
+    )
   }
 }

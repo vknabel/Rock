@@ -42,6 +42,14 @@ main.register(ScriptCommand(
   verb: "archive",
   function: "Builds a release for your project."
 ))
+main.register(ScriptCommand(
+  verb: "lint",
+  function: "Lints your projects."
+))
+main.register(ScriptCommand(
+  verb: "publish",
+  function: "Publishes a new release of your project."
+))
 main.register(HelpCommand(registry: main))
 
 main.main(defaultVerb: "help") { error in
