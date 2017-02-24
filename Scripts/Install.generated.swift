@@ -9,7 +9,7 @@ typealias Process = Task
 #endif
 
 let rockPath = ProcessInfo.processInfo.environment["ROCK_PATH"] ?? "~/.rock"
-let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.3.0"
+let version = ProcessInfo.processInfo.environment["ROCK_VERSION"] ?? "0.3.1"
 
 func run(workingDir: String? = nil, _ args: String...) {
   let process = Process()
