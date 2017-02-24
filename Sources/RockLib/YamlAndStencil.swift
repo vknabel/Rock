@@ -3,8 +3,10 @@ import PathKit
 import Stencil
 import Yaml
 
+typealias ContextLiteral = [String: Any]
+
 private extension String {
-  func render(_ context: Context? = nil) throws -> String {
+  func render(_ context: ContextLiteral? = nil) throws -> String {
     let template = Template(templateString: self)
     return try template.render(context)
   }
@@ -55,19 +57,18 @@ private extension Yaml {
 
   func render(
     _ dictionary: [String: Any],
-    namespace: Namespace = Namespace(),
     descriptor: Yaml.YamlSortDescriptor
   ) throws -> (Any, Yaml) {
+    let context = dictionary
     switch self {
     case let .string(value):
-      let context = Context(dictionary: dictionary, namespace: namespace)
       let rendered = try value.render(context)
       return (rendered, .string(rendered))
     case let .array(values):
       var contextList = [Any]()
       var vs = [(Any, Yaml)]()
       for v in values {
-        let result = try v.render(dictionary, namespace: namespace, descriptor: descriptor)
+        let result = try v.render(dictionary, descriptor: descriptor)
         contextList.append(result.0)
         vs.append(result)
       }
@@ -78,8 +79,8 @@ private extension Yaml {
       var localDictionary: [String: Any] = [:]
 
       try value.sorted(by: descriptor).forEach { key, value in
-        let renderedKey = try key.render(dictionary, namespace: namespace, descriptor: descriptor)
-        let renderedValue = try value.render(dictionary, namespace: namespace, descriptor: descriptor)
+        let renderedKey = try key.render(dictionary, descriptor: descriptor)
+        let renderedValue = try value.render(dictionary, descriptor: descriptor)
         dict[renderedKey.1] = renderedValue.1
 
         if let renderedKey = renderedKey.0 as? String {
@@ -99,17 +100,15 @@ public extension Yaml {
 
   public static func rendering(
     _ text: String,
-    namespace: Namespace = Namespace(),
     orderedBy order: [Yaml] = ["const", "constant", "constants", "version", "license", "name", "url"]
   ) throws -> Yaml {
-    return try rendering(text, namespace: namespace, sort: sortDescriptor(by: order))
+    return try rendering(text, sort: sortDescriptor(by: order))
   }
 
   public static func rendering(
     _ text: String,
-    namespace: Namespace = Namespace(),
     sort descriptor: YamlSortDescriptor
   ) throws -> Yaml {
-    return try Yaml.load(text).render([:], namespace: namespace, descriptor: descriptor).1
+    return try Yaml.load(text).render([:], descriptor: descriptor).1
   }
 }

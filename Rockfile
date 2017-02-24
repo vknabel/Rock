@@ -1,6 +1,6 @@
 name: Rock
 url: https://github.com/vknabel/Rock
-version: 0.3.0
+version: 0.3.1
 # Dependencies may be installed locally by running `rock install`
 # If you like you can even delcare Specs inline or override specific scripts.
 dependencies:
@@ -44,6 +44,7 @@ scripts:
     # Set git tag
     - git tag -a {{version}} -m {{version}}
     - git push --tags
+  postpublish:
     # Copy latest Changelog
     - sed -n /'^## {{version}}$'/,/'^## '/p CHANGELOG.md | sed -e '$ d' | pbcopy
     # Create new release on Github

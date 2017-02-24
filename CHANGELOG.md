@@ -1,5 +1,11 @@
 # Rock
 
+## 0.3.1
+
+### Non Breaking Changes
+
+- **[Dependencies]** Upgraded `PathKit`, `Stencil` and `PromptLine` which fixes Linux issues
+
 ## 0.3.0
 
 ### Additions
